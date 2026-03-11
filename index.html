@@ -425,9 +425,19 @@ async function loadFromSupabase() {
 
   if (error && error.code !== 'PGRST116') return;
 
-  if (rows) {
-    data = rows.data;
-    if (!data.openState) data.openState = {};
+  if (rows && rows.data) {
+    const d = rows.data;
+    // Merge con DEFAULT para garantizar que todos los campos existen
+    data = {
+      principios:  Array.isArray(d.principios)  ? d.principios  : DEFAULT.principios,
+      perspectivas:Array.isArray(d.perspectivas) ? d.perspectivas: DEFAULT.perspectivas,
+      practicas:   Array.isArray(d.practicas)    ? d.practicas   : DEFAULT.practicas,
+      proyecto:    Array.isArray(d.proyecto)     ? d.proyecto    : DEFAULT.proyecto,
+      priming:     Array.isArray(d.priming)      ? d.priming     : DEFAULT.priming,
+      tasks:       Array.isArray(d.tasks)        ? d.tasks       : [],
+      openState:   (d.openState && typeof d.openState === 'object') ? d.openState : {}
+    };
+    // Reset tareas si es un día nuevo
     if (rows.last_day !== new Date().toDateString()) data.tasks = [];
   }
 }
@@ -616,16 +626,19 @@ function applyEdit() {
 }
 function collectEdits() {
   document.querySelectorAll('[data-type]').forEach(function(el) {
-    const v = el.innerText.trim(), t = el.dataset.type;
-    if (t==='principle-label')    data.principios[+el.dataset.pi].label = v;
-    else if (t==='principle-child')   data.principios[+el.dataset.pi].children[+el.dataset.ci] = v;
-    else if (t==='perspectiva-label') data.perspectivas[+el.dataset.pi].label = v;
-    else if (t==='perspectiva-child') data.perspectivas[+el.dataset.pi].children[+el.dataset.ci] = v;
-    else if (t==='practica-text') data.practicas[+el.dataset.i].text = v;
-    else if (t==='practica-sub')  data.practicas[+el.dataset.i].sub = v;
-    else if (t==='proyecto-no')   data.proyecto[+el.dataset.i].no = v;
-    else if (t==='proyecto-si')   data.proyecto[+el.dataset.i].si = v;
-    else if (t==='priming-text')  data.priming[+el.dataset.i].text = v;
+    const v = (el.innerText || '').trim();
+    if (!v) return; // nunca guardar valores vacíos
+    const t = el.dataset.type;
+    const i = +el.dataset.i, pi = +el.dataset.pi, ci = +el.dataset.ci;
+    if (t==='principle-label'    && data.principios[pi])              data.principios[pi].label = v;
+    else if (t==='principle-child'    && data.principios[pi])         data.principios[pi].children[ci] = v;
+    else if (t==='perspectiva-label'  && data.perspectivas[pi])       data.perspectivas[pi].label = v;
+    else if (t==='perspectiva-child'  && data.perspectivas[pi])       data.perspectivas[pi].children[ci] = v;
+    else if (t==='practica-text'  && data.practicas[i])               data.practicas[i].text = v;
+    else if (t==='practica-sub'   && data.practicas[i])               data.practicas[i].sub = v;
+    else if (t==='proyecto-no'    && data.proyecto[i])                data.proyecto[i].no = v;
+    else if (t==='proyecto-si'    && data.proyecto[i])                data.proyecto[i].si = v;
+    else if (t==='priming-text'   && data.priming[i])                 data.priming[i].text = v;
   });
 }
 
