@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Base Camp</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Base Camp — David Elorza</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -18,129 +16,148 @@
   --slate:#334155; --slate-bg:#f1f5f9; --slate-border:#cbd5e1;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;color:var(--text-1);}
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:24px;}
-.login-title{font-family:'Fraunces',serif;font-size:28px;font-weight:400;letter-spacing:-.02em;line-height:1.1;text-align:center;}
-.login-title em{font-style:italic;color:var(--green);}
-.login-by{font-size:13px;font-style:italic;color:var(--text-3);margin-top:4px;font-family:'Fraunces',serif;font-weight:300;text-align:center;}
-.login-form{display:flex;flex-direction:column;gap:12px;}
-.login-field{display:flex;flex-direction:column;gap:5px;}
-.login-field label{font-size:10.5px;font-family:'DM Mono',monospace;letter-spacing:.08em;color:var(--text-3);text-transform:uppercase;}
-.login-input{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-1);outline:none;transition:border-color .15s,box-shadow .15s;}
-.login-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:white;}
-.login-submit{width:100%;padding:12px;border-radius:10px;border:none;background:var(--text-1);color:white;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .18s;margin-top:4px;}
-.login-submit:hover{background:#2d2c29;}
-.login-submit:disabled{opacity:.5;cursor:not-allowed;}
-.login-toggle{font-size:12px;color:var(--text-3);text-align:center;}
-.login-toggle a{color:var(--green);text-decoration:underline;cursor:pointer;}
-.msg{font-size:12px;border-radius:8px;padding:10px 14px;display:none;}
-.msg.err{color:#dc2626;background:#fef2f2;border:1px solid #fecaca;}
-.msg.ok{color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);}
-#app-screen{display:none;padding:24px 20px 88px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padding:24px 20px 88px;color:var(--text-1);}
+
+/* ── Header ── */
 .page-header{max-width:1000px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:center;}
 .page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:400;letter-spacing:-0.02em;line-height:1.1;}
 .page-title em{font-style:italic;color:var(--green);}
 .header-right{display:flex;align-items:center;gap:10px;}
 .page-meta{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--text-3);letter-spacing:0.07em;text-align:right;line-height:1.7;}
-.rescue-btn{height:32px;padding:0 10px;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.rescue-btn:hover{background:#fffbeb;border-color:var(--amber-border);}
-.logout-btn{height:32px;padding:0 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:11px;color:var(--text-3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;}
-.logout-btn:hover{color:var(--text-1);border-color:var(--border-strong);}
+.rescue-btn{height:32px;padding:0 10px;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06);flex-shrink:0;}
+.rescue-btn:hover{background:#fffbeb;border-color:var(--amber-border);transform:scale(1.04);}
+
+/* ── Grid ── */
 .grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ── Quad ── */
 .quad{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 18px 14px;display:flex;flex-direction:column;}
 .quad-header{display:flex;align-items:center;gap:10px;padding-bottom:11px;border-bottom:1px solid var(--border);margin-bottom:6px;}
 .quad-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
 .quad-title{font-family:'Fraunces',serif;font-size:16px;font-weight:400;letter-spacing:-0.01em;}
 .quad-subtitle{font-size:10.5px;color:var(--text-3);font-weight:300;margin-top:1px;}
-.quad-q1 .quad-icon{background:var(--purple-bg);} .quad-q1 .quad-header{border-color:var(--purple-border);}
-.quad-q2 .quad-icon{background:var(--green-bg);} .quad-q2 .quad-header{border-color:var(--green-border);}
-.quad-q3 .quad-icon{background:var(--blue-bg);} .quad-q3 .quad-header{border-color:var(--blue-border);}
-.quad-q4 .quad-icon{background:var(--slate-bg);} .quad-q4 .quad-header{border-color:var(--slate-border);}
-.quad-q5{background:var(--amber-light);} .quad-q5 .quad-icon{background:var(--amber-bg);} .quad-q5 .quad-header{border-color:var(--amber-border);}
-.quad-q6 .quad-icon{background:var(--slate-bg);} .quad-q6 .quad-header{border-color:var(--slate-border);}
-.quad-q6 .item-dot{background:var(--slate);} .quad-q6 .item-text{font-weight:400;}
-.quad-q3 .item-dot{background:var(--blue);}
-.collapsible{border-radius:8px;margin-bottom:2px;border:1px solid transparent;overflow:hidden;}
+.quad-divider{height:1px;background:var(--border);margin:8px 0 4px;}
+.quad-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);padding:0 8px;margin:6px 0 3px;}
+
+/* ── Color themes ── */
+.quad-q1 .quad-icon{background:var(--purple-bg);}
+.quad-q1 .quad-header{border-color:var(--purple-border);}
+.quad-q2 .quad-icon{background:var(--green-bg);}
+.quad-q2 .quad-header{border-color:var(--green-border);}
+.quad-q3 .quad-icon{background:var(--blue-bg);}
+.quad-q3 .quad-header{border-color:var(--blue-border);}
+.quad-q4 .quad-icon{background:var(--slate-bg);}
+.quad-q4 .quad-header{border-color:var(--slate-border);}
+.quad-q5{background:var(--amber-light);}
+.quad-q5 .quad-icon{background:var(--amber-bg);}
+.quad-q5 .quad-header{border-color:var(--amber-border);}
+.quad-q6 .quad-icon{background:var(--slate-bg);}
+.quad-q6 .quad-header{border-color:var(--slate-border);}
+
+/* ── Collapsibles ── */
+.collapsible{border-radius:8px;margin-bottom:2px;border:1px solid transparent;transition:border-color .15s,background .15s;overflow:hidden;}
 .collapsible.var-purple.open{border-color:var(--purple-border);background:#faf9ff;}
+.collapsible.var-purple .coll-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);flex-shrink:0;}
 .collapsible.var-purple .coll-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--purple);opacity:.55;width:14px;flex-shrink:0;text-align:right;}
+.collapsible.var-purple .child-row:hover{background:var(--purple-bg);}
 .collapsible.var-purple .child-dot{background:var(--purple);}
 .collapsible.var-green.open{border-color:var(--green-border);background:var(--green-light);}
 .collapsible.var-green .coll-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.collapsible.var-green .child-row:hover{background:var(--green-bg);}
 .collapsible.var-green .child-dot{background:var(--green);}
-.coll-trigger{display:flex;align-items:center;gap:9px;padding:5px 8px;cursor:pointer;user-select:none;border-radius:7px;}
+.coll-trigger{display:flex;align-items:center;gap:9px;padding:5px 8px;cursor:pointer;user-select:none;transition:background .12s;border-radius:7px;}
 .coll-trigger:hover{background:var(--bg);}
 .collapsible.open .coll-trigger{border-radius:0;background:transparent!important;}
 .coll-label{font-size:13px;font-weight:600;color:var(--text-1);flex:1;line-height:1.4;}
-.coll-chevron{font-size:10px;color:var(--text-3);transition:transform .2s;}
+.coll-chevron{font-size:10px;color:var(--text-3);transition:transform .2s ease;flex-shrink:0;}
 .collapsible.open .coll-chevron{transform:rotate(180deg);}
-.coll-body{display:none;flex-direction:column;padding:1px 8px 7px 31px;}
+.coll-body{display:none;flex-direction:column;gap:0;padding:1px 8px 7px 31px;}
 .collapsible.open .coll-body{display:flex;}
 .child-row{display:flex;gap:8px;align-items:flex-start;padding:3px 6px;border-radius:6px;}
 .child-dot{width:4px;height:4px;border-radius:50%;opacity:.35;margin-top:7px;flex-shrink:0;}
 .child-text{font-size:12px;color:var(--text-2);line-height:1.45;font-style:italic;flex:1;}
-.item{display:flex;gap:9px;align-items:flex-start;padding:5px 8px;border-radius:7px;}
+
+/* ── Generic items ── */
+.item{display:flex;gap:9px;align-items:flex-start;padding:5px 8px;border-radius:7px;transition:background .12s;}
 .item:hover{background:var(--bg);}
 .item-dot{width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+.quad-q3 .item-dot{background:var(--blue);}
+.quad-q6 .item-dot{background:var(--slate);}
+.quad-q6 .item-text{font-weight:400;}
 .item-body{flex:1;}
 .item-text{font-size:13px;font-weight:600;color:var(--text-1);line-height:1.4;}
+.item-text.muted{font-weight:400;color:var(--text-2);}
 .item-sub{font-size:11px;color:var(--text-3);margin-top:2px;line-height:1.4;font-style:italic;}
+
+/* ── Proyecto table ── */
 .proyecto-table{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;}
 .proyecto-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 6px 5px;border-bottom:1px solid var(--border);text-align:left;}
 .proyecto-table th.col-no{color:#dc2626;width:calc(50% - 10px);}
 .proyecto-table th.col-si{color:var(--green);width:calc(50% - 10px);}
 .proyecto-table th.col-arr{width:20px;}
 .proyecto-table td{padding:4px 6px;vertical-align:middle;}
+.proyecto-table td.td-no{width:calc(50% - 10px);}
+.proyecto-table td.td-arr{width:20px;text-align:center;}
+.proyecto-table td.td-si{width:calc(50% - 10px);}
 .proyecto-table tr:not(:last-child) td{border-bottom:1px solid var(--border);}
 .proyecto-cell-no{font-size:12px;color:#b0ada6;line-height:1.4;font-style:italic;text-decoration:line-through;text-decoration-color:#e0d0d0;display:block;}
 .proyecto-cell-si{font-size:12px;color:var(--text-1);font-weight:500;line-height:1.4;}
 .arrow{color:var(--text-3);font-size:10px;}
+
+/* ── Daily tasks ── */
 .daily-subtitle{font-size:11.5px;color:var(--text-3);font-style:italic;padding:6px 8px 4px;line-height:1.55;font-family:'Fraunces',serif;font-weight:300;}
 .task-list{display:flex;flex-direction:column;gap:2px;}
-.task-item{display:flex;align-items:flex-start;gap:9px;padding:5px 8px;border-radius:7px;}
+.task-item{display:flex;align-items:flex-start;gap:9px;padding:5px 8px;border-radius:7px;transition:background .12s;}
 .task-item:hover{background:#fff8e6;}
 .task-check{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--amber-border);background:white;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s;}
 .task-item.done .task-check{background:#d97706;border-color:#d97706;}
-.task-item.done .task-check::after{content:'checkmark';font-size:9px;color:white;font-weight:700;content:'\2713';}
-.task-label{font-size:13px;color:var(--text-1);line-height:1.4;flex:1;font-weight:500;outline:none;border-radius:4px;cursor:text;}
+.task-item.done .task-check::after{content:'✓';font-size:9px;color:white;font-weight:700;}
+.task-label{font-size:13px;color:var(--text-1);line-height:1.4;flex:1;font-weight:500;outline:none;border-radius:4px;transition:background .12s;cursor:text;}
+.task-label:hover{background:rgba(0,0,0,.03);}
 .task-label:focus{background:white;box-shadow:0 0 0 2px var(--amber-border);padding:0 3px;}
 .task-item.done .task-label{color:var(--text-3);text-decoration:line-through;font-weight:400;}
-.task-delete{font-size:12px;color:var(--text-3);cursor:pointer;padding:2px 4px;border-radius:4px;flex-shrink:0;align-self:center;line-height:1;}
+.task-delete{font-size:12px;color:var(--text-3);cursor:pointer;padding:2px 4px;border-radius:4px;flex-shrink:0;align-self:center;transition:color .15s;line-height:1;}
 .task-delete:hover{color:#dc2626;}
-.task-add-row{display:flex;align-items:center;gap:8px;padding:4px 8px;margin-top:4px;border-radius:7px;}
+.task-add-row{display:flex;align-items:center;gap:8px;padding:4px 8px;margin-top:4px;border-radius:7px;transition:background .12s;}
 .task-add-row:focus-within{background:#fff8e6;}
-.task-add-icon{font-size:13px;color:var(--amber-border);flex-shrink:0;}
+.task-add-icon{font-size:13px;color:var(--amber-border);flex-shrink:0;line-height:1;}
 .task-add-input{flex:1;font-size:13px;font-family:'DM Sans',sans-serif;border:none;outline:none;background:transparent;color:var(--text-1);padding:2px 0;}
 .task-add-input::placeholder{color:var(--text-3);font-weight:300;}
+
+/* ── Edit mode ── */
 .fab{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--text-1);color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:transform .2s,background .2s;z-index:100;}
 .fab:hover{transform:scale(1.08);}
 .fab.active{background:var(--green);}
-[contenteditable]{outline:none;border-radius:4px;}
+[contenteditable]{outline:none;border-radius:4px;transition:background .15s,box-shadow .15s;}
 body.editing [contenteditable]:hover{background:rgba(0,0,0,.03);}
 body.editing [contenteditable]:focus{background:white;box-shadow:0 0 0 2px var(--green);padding:1px 4px;}
-.btn-add{display:none;align-items:center;gap:5px;font-size:11px;color:var(--green);cursor:pointer;padding:4px 8px;border-radius:6px;border:1px dashed var(--green-border);background:var(--green-bg);font-family:'DM Sans',sans-serif;width:fit-content;margin-top:4px;}
+.btn-add{display:none;align-items:center;gap:5px;font-size:11px;color:var(--green);cursor:pointer;padding:4px 8px;border-radius:6px;border:1px dashed var(--green-border);background:var(--green-bg);font-family:'DM Sans',sans-serif;transition:opacity .15s;width:fit-content;margin-top:4px;}
 .btn-add:hover{opacity:.75;}
 body.editing .btn-add{display:flex;}
-.btn-delete{display:none;font-size:11px;color:var(--text-3);cursor:pointer;padding:2px 5px;border-radius:4px;flex-shrink:0;margin-left:auto;align-self:center;}
+.btn-delete{display:none;font-size:11px;color:var(--text-3);cursor:pointer;padding:2px 5px;border-radius:4px;flex-shrink:0;transition:color .15s;margin-left:auto;align-self:center;}
 .btn-delete:hover{color:#dc2626;}
 body.editing .btn-delete{display:block;}
+
+/* ── Toast ── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);opacity:0;background:var(--text-1);color:white;font-size:12px;padding:8px 18px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:all .25s ease;pointer-events:none;z-index:200;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── Rescue modal ── */
 .rescue-overlay{position:fixed;inset:0;background:rgba(20,18,14,.45);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s ease;}
 .rescue-overlay.open{opacity:1;pointer-events:all;}
-.rescue-modal{background:var(--surface);border-radius:18px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.18);padding:24px;display:flex;flex-direction:column;gap:16px;transform:translateY(12px) scale(.98);transition:transform .25s ease;max-height:90vh;overflow-y:auto;}
+.rescue-modal{background:var(--surface);border-radius:18px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);padding:24px;display:flex;flex-direction:column;gap:16px;transform:translateY(12px) scale(.98);transition:transform .25s ease;max-height:90vh;overflow-y:auto;}
 .rescue-overlay.open .rescue-modal{transform:translateY(0) scale(1);}
 .rescue-modal-header{display:flex;justify-content:space-between;align-items:center;}
-.rescue-modal-title{font-family:'Fraunces',serif;font-size:18px;font-weight:400;}
-.rescue-close{background:none;border:none;font-size:15px;color:var(--text-3);cursor:pointer;padding:4px;border-radius:6px;}
+.rescue-modal-title{font-family:'Fraunces',serif;font-size:18px;font-weight:400;letter-spacing:-.01em;}
+.rescue-close{background:none;border:none;font-size:15px;color:var(--text-3);cursor:pointer;padding:4px;border-radius:6px;transition:color .15s;}
 .rescue-close:hover{color:var(--text-1);}
 .rescue-prompt{font-size:12px;color:var(--text-3);letter-spacing:.04em;}
 .rescue-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
-.rescue-option{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:all .15s;}
+.rescue-option{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:4px;}
 .rescue-option:hover{border-color:var(--border-strong);background:white;box-shadow:0 2px 8px rgba(0,0,0,.07);}
 .rescue-option-emoji{font-size:18px;line-height:1;}
 .rescue-option-label{font-size:13px;font-weight:500;color:var(--text-1);}
-.rescue-back{font-size:12px;color:var(--text-3);cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.rescue-back{font-size:12px;color:var(--text-3);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:color .15s;}
 .rescue-back:hover{color:var(--text-1);}
 .rescue-response{display:flex;flex-direction:column;gap:12px;}
 .rescue-response-title{font-family:'Fraunces',serif;font-size:17px;font-weight:400;font-style:italic;color:var(--text-1);line-height:1.4;}
@@ -149,491 +166,769 @@ body.editing .btn-delete{display:block;}
 .rescue-card-text{font-size:13.5px;color:var(--text-1);line-height:1.6;font-style:italic;font-family:'Fraunces',serif;font-weight:300;}
 .rescue-card-hint{font-size:11.5px;color:var(--text-3);line-height:1.5;}
 .hidden{display:none!important;}
-@media(max-width:700px){#app-screen{padding:14px 12px 80px;}.page-header{flex-direction:column;align-items:flex-start;gap:8px;}.header-right{align-self:flex-end;}.grid{grid-template-columns:1fr;gap:12px;}.fab{bottom:18px;right:14px;}}
-@media(min-width:701px) and (max-width:900px){.grid{grid-template-columns:1fr 1fr;}}
+
+/* ── Responsive ── */
+@media(max-width:700px){
+  body{padding:14px 12px 80px;}
+  .page-header{flex-direction:column;align-items:flex-start;gap:8px;}
+  .header-right{align-self:flex-end;}
+  .page-title{font-size:22px;}
+  .page-meta{text-align:left;}
+  .grid{grid-template-columns:1fr;gap:12px;}
+  .fab{bottom:18px;right:14px;}
+}
+@media(min-width:701px) and (max-width:900px){
+  .grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ── Login ── */
+#login-screen{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;z-index:500;
+}
+.login-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:40px 36px;width:100%;max-width:360px;
+  box-shadow:0 8px 40px rgba(0,0,0,.08);
+  display:flex;flex-direction:column;gap:22px;
+}
+.login-title{font-family:'Fraunces',serif;font-size:26px;font-weight:400;letter-spacing:-.02em;line-height:1.1;text-align:center;}
+.login-title em{font-style:italic;color:var(--green);}
+.login-by{font-size:13px;font-style:italic;color:var(--text-3);margin-top:3px;font-family:'Fraunces',serif;font-weight:300;text-align:center;}
+.login-fields{display:flex;flex-direction:column;gap:12px;}
+.login-field{display:flex;flex-direction:column;gap:5px;}
+.login-field label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;}
+.login-input{
+  width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);
+  background:var(--bg);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-1);
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.login-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:#fff;}
+.login-btn{
+  width:100%;padding:12px;border-radius:10px;border:none;
+  background:var(--text-1);color:#fff;font-size:14px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .18s;margin-top:2px;
+}
+.login-btn:hover{background:#2d2c29;}
+.login-btn:disabled{opacity:.5;cursor:not-allowed;}
+.login-toggle{font-size:12px;color:var(--text-3);text-align:center;}
+.login-toggle a{color:var(--green);text-decoration:underline;cursor:pointer;}
+.login-msg{font-size:12px;border-radius:8px;padding:9px 13px;display:none;line-height:1.5;}
+.login-msg.err{color:#dc2626;background:#fef2f2;border:1px solid #fecaca;}
+.login-msg.ok{color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);}
+.logout-btn{
+  height:30px;padding:0 12px;border-radius:8px;background:var(--surface);
+  border:1px solid var(--border);font-size:11px;color:var(--text-3);
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;
+}
+.logout-btn:hover{color:var(--text-1);border-color:var(--border-strong);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<div id="login-screen">
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:none">
   <div class="login-card">
     <div>
       <div class="login-title">Base <em>Camp</em></div>
       <div class="login-by">by David Elorza</div>
     </div>
+
+    <!-- signin form -->
     <div id="form-signin">
-      <div class="login-form">
-        <div class="login-field"><label>Email</label><input class="login-input" id="si-email" type="email" placeholder="tu@email.com" autocomplete="email"></div>
-        <div class="login-field"><label>Contrasena</label><input class="login-input" id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()"></div>
-        <button class="login-submit" id="si-btn" onclick="signIn()">Entrar</button>
-        <div class="msg err" id="si-err"></div>
+      <div class="login-fields">
+        <div class="login-field">
+          <label>Email</label>
+          <input class="login-input" id="si-email" type="email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+        <div class="login-field">
+          <label>Contraseña</label>
+          <input class="login-input" id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter')doSignIn()">
+        </div>
+        <button class="login-btn" id="si-btn" onclick="doSignIn()">Entrar</button>
+        <div class="login-msg err" id="si-err"></div>
       </div>
-      <div style="height:12px"></div>
-      <div class="login-toggle">No tenes cuenta? <a onclick="showForm('up')">Crear una</a></div>
+      <div style="height:10px"></div>
+      <div class="login-toggle">¿No tenés cuenta? <a onclick="showForm('up')">Crear una</a></div>
     </div>
-    <div id="form-signup" class="hidden">
-      <div class="login-form">
-        <div class="login-field"><label>Email</label><input class="login-input" id="su-email" type="email" placeholder="tu@email.com" autocomplete="email"></div>
-        <div class="login-field"><label>Contrasena</label><input class="login-input" id="su-pass" type="password" placeholder="Minimo 6 caracteres" autocomplete="new-password" onkeydown="if(event.key==='Enter')signUp()"></div>
-        <button class="login-submit" id="su-btn" onclick="signUp()">Crear cuenta</button>
-        <div class="msg err" id="su-err"></div>
-        <div class="msg ok" id="su-ok">Listo! Revisa tu email para confirmar tu cuenta.</div>
+
+    <!-- signup form -->
+    <div id="form-signup" style="display:none">
+      <div class="login-fields">
+        <div class="login-field">
+          <label>Email</label>
+          <input class="login-input" id="su-email" type="email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+        <div class="login-field">
+          <label>Contraseña</label>
+          <input class="login-input" id="su-pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"
+            onkeydown="if(event.key==='Enter')doSignUp()">
+        </div>
+        <button class="login-btn" id="su-btn" onclick="doSignUp()">Crear cuenta</button>
+        <div class="login-msg err" id="su-err"></div>
+        <div class="login-msg ok" id="su-ok">¡Listo! Revisá tu email para confirmar la cuenta.</div>
       </div>
-      <div style="height:12px"></div>
-      <div class="login-toggle">Ya tenes cuenta? <a onclick="showForm('in')">Iniciar sesion</a></div>
+      <div style="height:10px"></div>
+      <div class="login-toggle">¿Ya tenés cuenta? <a onclick="showForm('in')">Iniciá sesión</a></div>
     </div>
   </div>
 </div>
 
-<div id="app-screen">
-  <div class="page-header">
-    <div class="page-title">Base <em>Camp</em> <span style="font-size:14px;font-style:italic;color:var(--text-3);font-weight:300;">by David Elorza</span></div>
-    <div class="header-right">
-      <button class="rescue-btn" onclick="openRescue()" title="Que te tiene atascado?">&#9889;</button>
-      <div class="page-meta" id="dateMeta"></div>
-      <button class="logout-btn" onclick="doLogout()">Salir</button>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="quad quad-q1">
-      <div class="quad-header"><div class="quad-icon">&#x1F9ED;</div><div><div class="quad-title">Principios</div><div class="quad-subtitle">como decido actuar</div></div></div>
-      <div id="principios-list"></div>
-      <button class="btn-add" onclick="addPrincipio()">+ Agregar principio</button>
-    </div>
-    <div class="quad quad-q2">
-      <div class="quad-header"><div class="quad-icon">&#x1F52D;</div><div><div class="quad-title">Perspectivas</div><div class="quad-subtitle">como me relaciono con el proceso</div></div></div>
-      <div id="perspectivas-list"></div>
-      <button class="btn-add" onclick="addPerspectiva()">+ Agregar perspectiva</button>
-    </div>
-    <div class="quad quad-q3">
-      <div class="quad-header"><div class="quad-icon">&#x2699;&#xFE0F;</div><div><div class="quad-title">Progreso</div><div class="quad-subtitle">como avanzar en este momento</div></div></div>
-      <div id="practicas-list"></div>
-      <button class="btn-add" onclick="addPractica()">+ Agregar</button>
-    </div>
-    <div class="quad quad-q4">
-      <div class="quad-header"><div class="quad-icon">&#x1F5FA;&#xFE0F;</div><div><div class="quad-title">Proyecto</div><div class="quad-subtitle">de donde vengo y adonde voy</div></div></div>
-      <table class="proyecto-table"><thead><tr><th class="col-no">No quiero</th><th class="col-arr"></th><th class="col-si">Quiero</th></tr></thead><tbody id="proyecto-body"></tbody></table>
-      <button class="btn-add" onclick="addProyectoRow()">+ Agregar fila</button>
-    </div>
-    <div class="quad quad-q5">
-      <div class="quad-header"><div class="quad-icon">&#x1F3AF;</div><div><div class="quad-title">Prioridades del <span id="day-name"></span></div><div class="quad-subtitle">lo mas importante de hoy</div></div></div>
-      <div class="daily-subtitle">Que es aquello que haria que todo lo demas sea mas facil o innecesario?</div>
-      <div style="height:8px"></div>
-      <div class="task-list" id="tasks-list"></div>
-      <div class="task-add-row">
-        <span class="task-add-icon">+</span>
-        <input class="task-add-input" id="task-input" placeholder="Agregar tarea..." onkeydown="if(event.key==='Enter')addTask()">
-      </div>
-    </div>
-    <div class="quad quad-q6">
-      <div class="quad-header"><div class="quad-icon">&#x1F331;</div><div><div class="quad-title">Practicas</div><div class="quad-subtitle">habitos que sostienen el dia</div></div></div>
-      <div id="priming-list"></div>
-      <button class="btn-add" onclick="addPrimingItem()">+ Agregar habito</button>
-    </div>
+
+<div class="page-header">
+  <div class="page-title">Base <em>Camp</em> <span style="font-size:14px;font-style:italic;color:var(--text-3);font-family:'Fraunces',serif;font-weight:300;">by David Elorza</span></div>
+  <div class="header-right">
+    <button class="rescue-btn" onclick="openRescue()" title="¿Qué te tiene atascado?">⚡</button>
+    <div class="page-meta" id="dateMeta">—</div>
+    <button class="logout-btn" id="logout-btn" onclick="doLogout()" style="display:none">Salir</button>
   </div>
 </div>
 
-<button class="fab hidden" id="fab" onclick="toggleEdit()">&#x270F;&#xFE0F;</button>
+<div class="grid">
+
+  <!-- ① PRINCIPIOS -->
+  <div class="quad quad-q1">
+    <div class="quad-header">
+      <div class="quad-icon">🧭</div>
+      <div><div class="quad-title">Principios</div><div class="quad-subtitle">cómo decido actuar</div></div>
+    </div>
+    <div id="principios-list"></div>
+    <button class="btn-add" onclick="addPrincipio()">+ Agregar principio</button>
+  </div>
+
+  <!-- ② PERSPECTIVAS -->
+  <div class="quad quad-q2">
+    <div class="quad-header">
+      <div class="quad-icon">🔭</div>
+      <div><div class="quad-title">Perspectivas</div><div class="quad-subtitle">cómo me relaciono con el proceso</div></div>
+    </div>
+    <div id="perspectivas-list"></div>
+    <button class="btn-add" onclick="addPerspectiva()">+ Agregar perspectiva</button>
+  </div>
+
+  <!-- ③ PROGRESO -->
+  <div class="quad quad-q3">
+    <div class="quad-header">
+      <div class="quad-icon">⚙️</div>
+      <div><div class="quad-title">Progreso</div><div class="quad-subtitle">cómo avanzar en este momento</div></div>
+    </div>
+    <div id="practicas-list"></div>
+    <button class="btn-add" onclick="addPractica()">+ Agregar</button>
+  </div>
+
+  <!-- ④ PROYECTO -->
+  <div class="quad quad-q4">
+    <div class="quad-header">
+      <div class="quad-icon">🗺️</div>
+      <div><div class="quad-title">Proyecto</div><div class="quad-subtitle">de dónde vengo y adónde voy</div></div>
+    </div>
+    <table class="proyecto-table">
+      <thead><tr>
+        <th class="col-no">No quiero</th>
+        <th class="col-arr"></th>
+        <th class="col-si">Quiero</th>
+      </tr></thead>
+      <tbody id="proyecto-body"></tbody>
+    </table>
+    <button class="btn-add" onclick="addProyectoRow()">+ Agregar fila</button>
+  </div>
+
+  <!-- ⑤ PRIORIDADES DEL DÍA -->
+  <div class="quad quad-q5">
+    <div class="quad-header">
+      <div class="quad-icon">🎯</div>
+      <div><div class="quad-title">Prioridades del <span id="day-name"></span></div><div class="quad-subtitle">lo más importante de hoy</div></div>
+    </div>
+    <div class="daily-subtitle">¿Qué es aquello que haría que todo lo demás sea más fácil o innecesario?</div>
+    <div style="height:8px"></div>
+    <div class="task-list" id="tasks-list"></div>
+    <div class="task-add-row">
+      <span class="task-add-icon">+</span>
+      <input class="task-add-input" id="task-input" placeholder="Agregar tarea…" onkeydown="if(event.key==='Enter')addTask()">
+    </div>
+  </div>
+
+  <!-- ⑥ PRÁCTICAS -->
+  <div class="quad quad-q6">
+    <div class="quad-header">
+      <div class="quad-icon">🌱</div>
+      <div><div class="quad-title">Prácticas</div><div class="quad-subtitle">hábitos que sostienen el día</div></div>
+    </div>
+    <div id="priming-list"></div>
+    <button class="btn-add" onclick="addPrimingItem()">+ Agregar hábito</button>
+  </div>
+
+</div>
+
+<button class="fab" id="fab" onclick="toggleEdit()" title="Editar">✏️</button>
 <div class="toast" id="toast"></div>
 
+<!-- ⚡ RESCUE MODAL -->
 <div class="rescue-overlay" id="rescueOverlay" onclick="maybeCloseRescue(event)">
   <div class="rescue-modal">
     <div class="rescue-modal-header">
-      <div class="rescue-modal-title">&#9889; Que te tiene atascado?</div>
-      <button class="rescue-close" onclick="closeRescue()">&#x2715;</button>
+      <div class="rescue-modal-title">⚡ ¿Qué te tiene atascado?</div>
+      <button class="rescue-close" onclick="closeRescue()">✕</button>
     </div>
     <div id="rescue-step-1">
-      <p class="rescue-prompt">Elegi lo que mas resuena ahora mismo:</p>
+      <p class="rescue-prompt">Elegí lo que más resuena ahora mismo:</p>
       <div class="rescue-options" id="rescue-options"></div>
     </div>
     <div id="rescue-step-2" class="hidden">
-      <div class="rescue-back" onclick="rescueBack()">&#8592; Volver</div>
+      <div class="rescue-back" onclick="rescueBack()">← Volver</div>
       <div class="rescue-response" id="rescue-response"></div>
     </div>
   </div>
 </div>
 
 <script>
-(function(){
-'use strict';
-
-var SUPA_URL = 'https://kridwawynaampaikrlal.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWR3YXd5bmFhbXBhaWtybGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODIyMzEsImV4cCI6MjA4ODc1ODIzMX0.UKY7XANWAOQPsyjInjqnXX9HOYmRyQ7XeK-MCu3To50';
-var sb = supabase.createClient(SUPA_URL, SUPA_KEY, {
+// ── SUPABASE ──
+const SUPA_URL = 'https://kridwawynaampaikrlal.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWR3YXd5bmFhbXBhaWtybGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODIyMzEsImV4cCI6MjA4ODc1ODIzMX0.UKY7XANWAOQPsyjInjqnXX9HOYmRyQ7XeK-MCu3To50';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY, {
   auth: { persistSession: true, autoRefreshToken: true }
 });
 
-var DEFAULT = {
+// ── DATA ──
+const DEFAULT = {
   principios: [
-    { label:'Todo es una iteracion', children:['Cambia modo desempeno por modo experimento, hace la v0.1.','Toma accion imperfecta, incompleta e insegura.','Desmantela el pensamiento todo-o-nada.'] },
-    { label:'Wonder', children:['Cuando estes paralizado, no fuerces la voluntad.','Cual es el ajuste mas pequeno que podria intentar hoy?'] },
-    { label:'No existe el fracaso', children:['Este intento me dio datos. Mi siguiente version sera mejor.','Cada resultado es informacion, no un veredicto.'] }
+    { label:'Todo es una iteración', children:['Cambiá "modo desempeño" por "modo experimento" — hacé la v0.1.','Tomá acción imperfecta, incompleta e insegura.','Desmantela el pensamiento todo-o-nada.'] },
+    { label:'Wonder', children:['Cuando estés paralizado, no fuerces la voluntad.','¿Cuál es el ajuste más pequeño que podría intentar hoy solo para ver qué pasa?'] },
+    { label:'No existe el fracaso', children:['"Este intento me dio datos. Mi siguiente versión será mejor."','Cada resultado es información, no un veredicto.'] }
   ],
   perspectivas: [
-    { label:'Disfrute mayor que Gestion', children:['Como puedo disfrutar esto y disfrutarme a mi en el proceso?','Que esta haciendo esto no disfrutable?'] },
-    { label:'Querer mayor que Deber', children:['Identifica tus deberia y encuentra el quiero detras.','Cual es el deseo inherente detras de este deberia?'] }
+    { label:'Disfrute › Gestión', children:['¿Cómo puedo disfrutar esto y disfrutarme a mí en el proceso?','¿Qué está haciendo esto no disfrutable?'] },
+    { label:'Querer › Deber', children:['Identificá tus "debería" y encontrá el "quiero" detrás.','¿Cuál es el deseo inherente detrás de este "debería"?'] }
   ],
   practicas: [
-    { text:'Anti-procrastinacion', sub:'Como haria esto si no pudiera avergonzarme ni ser duro conmigo?' },
-    { text:'Enfoque', sub:'Que distraccion puedo eliminar para hacer la concentracion mas facil?' },
-    { text:'Disciplina', sub:'Donde puedo quitar resistencia y hacer mas facil tomar accion?' }
+    { text:'Anti-procrastinación', sub:'¿Cómo haría esto si no pudiera avergonzarme ni ser duro conmigo?' },
+    { text:'Enfoque', sub:'¿Qué distracción puedo eliminar para hacer la concentración más fácil?' },
+    { text:'Disciplina', sub:'¿Dónde puedo quitar resistencia y hacer más fácil tomar acción?' }
   ],
   proyecto: [
-    { no:'Problemas de salud', si:'Fuerza, estetica y energia' },
-    { no:'Buscar trabajo y clientes', si:'Trabajar para mi mismo' },
+    { no:'Problemas de salud', si:'Fuerza, estética y energía' },
+    { no:'Buscar trabajo y clientes', si:'Trabajar para mí mismo' },
     { no:'No poder pagar lo que necesito', si:'Permitirme la vida que deseo' }
   ],
   tasks: [],
   priming: [
-    { text:'No usar redes hasta el mediodia' },
-    { text:'No usar el celular despues de las 23' },
+    { text:'No usar redes hasta el mediodía' },
+    { text:'No usar el celular después de las 23' },
     { text:'Hidratarme y moverme' },
-    { text:'Definir MIT para el dia siguiente' },
-    { text:'Preparar las cosas para la manana siguiente' }
+    { text:'Definir MIT para el día siguiente' },
+    { text:'Preparar las cosas para la mañana siguiente' }
   ],
   openState: {}
 };
 
-var data = JSON.parse(JSON.stringify(DEFAULT));
-var currentUser = null;
-var saveTimer = null;
-var editMode = false;
+// ── PERSISTENCE (Supabase + localStorage fallback) ──
+let currentUser = null;
+let data = JSON.parse(JSON.stringify(DEFAULT));
+let saveTimer = null;
 
-function showForm(w) {
-  document.getElementById('form-signin').classList.toggle('hidden', w !== 'in');
-  document.getElementById('form-signup').classList.toggle('hidden', w !== 'up');
+async function loadUserData() {
+  // try Supabase first
+  try {
+    const { data: row, error } = await sb.from('user_data')
+      .select('data, last_day')
+      .eq('user_id', currentUser.id)
+      .single();
+    if (!error && row && row.data) {
+      const d = row.data;
+      data = {
+        principios:   Array.isArray(d.principios)   ? d.principios   : DEFAULT.principios,
+        perspectivas: Array.isArray(d.perspectivas)  ? d.perspectivas : DEFAULT.perspectivas,
+        practicas:    Array.isArray(d.practicas)     ? d.practicas    : DEFAULT.practicas,
+        proyecto:     Array.isArray(d.proyecto)      ? d.proyecto     : DEFAULT.proyecto,
+        priming:      Array.isArray(d.priming)       ? d.priming      : DEFAULT.priming,
+        tasks:        Array.isArray(d.tasks)         ? d.tasks        : [],
+        openState:    (d.openState && typeof d.openState === 'object') ? d.openState : {}
+      };
+      if (row.last_day !== new Date().toDateString()) data.tasks = [];
+      return;
+    }
+  } catch(e) {}
+  // fallback: localStorage
+  try {
+    const s = localStorage.getItem('msb_' + currentUser.id);
+    if (s) {
+      const saved = JSON.parse(s);
+      if (saved.lastDay !== new Date().toDateString()) saved.tasks = [];
+      if (!saved.openState) saved.openState = {};
+      data = saved;
+    }
+  } catch(e) {}
 }
 
-async function signIn() {
-  var email = document.getElementById('si-email').value.trim();
-  var pass  = document.getElementById('si-pass').value;
-  var btn   = document.getElementById('si-btn');
-  var err   = document.getElementById('si-err');
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async function() {
+    data.lastDay = new Date().toDateString();
+    // save to localStorage immediately as backup
+    if (currentUser) localStorage.setItem('msb_' + currentUser.id, JSON.stringify(data));
+    // save to Supabase if logged in
+    if (currentUser) {
+      try {
+        await sb.from('user_data').upsert(
+          { user_id: currentUser.id, data: data, last_day: data.lastDay },
+          { onConflict: 'user_id' }
+        );
+      } catch(e) {}
+    }
+  }, 600);
+}
+
+// ── AUTH UI ──
+function showForm(which) {
+  document.getElementById('form-signin').style.display = which === 'in' ? 'block' : 'none';
+  document.getElementById('form-signup').style.display = which === 'up' ? 'block' : 'none';
+}
+
+async function doSignIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  const btn   = document.getElementById('si-btn');
+  const err   = document.getElementById('si-err');
   err.style.display = 'none';
-  if (!email || !pass) { showMsg(err,'Completa los dos campos.'); return; }
-  btn.disabled = true; btn.textContent = 'Entrando...';
-  var r = await sb.auth.signInWithPassword({ email:email, password:pass });
+  if (!email || !pass) { showMsg(err, 'Completá los dos campos.'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando…';
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   btn.disabled = false; btn.textContent = 'Entrar';
-  if (r.error) showMsg(err, xlate(r.error.message));
+  if (error) showMsg(err, xlateError(error.message));
 }
 
-async function signUp() {
-  var email = document.getElementById('su-email').value.trim();
-  var pass  = document.getElementById('su-pass').value;
-  var btn   = document.getElementById('su-btn');
-  var err   = document.getElementById('su-err');
-  var ok    = document.getElementById('su-ok');
-  err.style.display='none'; ok.style.display='none';
-  if (!email || !pass) { showMsg(err,'Completa los dos campos.'); return; }
-  if (pass.length < 6) { showMsg(err,'La contrasena debe tener al menos 6 caracteres.'); return; }
-  btn.disabled=true; btn.textContent='Creando...';
-  var r = await sb.auth.signUp({ email:email, password:pass });
-  btn.disabled=false; btn.textContent='Crear cuenta';
-  if (r.error) { showMsg(err, xlate(r.error.message)); return; }
-  ok.style.display='block';
+async function doSignUp() {
+  const email = document.getElementById('su-email').value.trim();
+  const pass  = document.getElementById('su-pass').value;
+  const btn   = document.getElementById('su-btn');
+  const err   = document.getElementById('su-err');
+  const ok    = document.getElementById('su-ok');
+  err.style.display = 'none'; ok.style.display = 'none';
+  if (!email || !pass) { showMsg(err, 'Completá los dos campos.'); return; }
+  if (pass.length < 6) { showMsg(err, 'La contraseña debe tener al menos 6 caracteres.'); return; }
+  btn.disabled = true; btn.textContent = 'Creando cuenta…';
+  const { error } = await sb.auth.signUp({ email, password: pass });
+  btn.disabled = false; btn.textContent = 'Crear cuenta';
+  if (error) { showMsg(err, xlateError(error.message)); return; }
+  ok.style.display = 'block';
 }
 
 async function doLogout() {
-  try { await sb.auth.signOut(); } catch(e){}
+  try { await sb.auth.signOut(); } catch(e) {}
   currentUser = null;
   data = JSON.parse(JSON.stringify(DEFAULT));
-  document.getElementById('app-screen').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('fab').classList.add('hidden');
-  document.getElementById('si-email').value='';
-  document.getElementById('si-pass').value='';
-  document.getElementById('si-err').style.display='none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('logout-btn').style.display = 'none';
+  document.getElementById('si-email').value = '';
+  document.getElementById('si-pass').value = '';
+  document.getElementById('si-err').style.display = 'none';
   showForm('in');
 }
 
-function showMsg(el,msg){ el.textContent=msg; el.style.display='block'; }
-function xlate(m){
-  if(m.indexOf('Invalid login')>=0) return 'Email o contrasena incorrectos.';
-  if(m.indexOf('Email not confirmed')>=0) return 'Confirma tu email antes de entrar.';
-  if(m.indexOf('already registered')>=0) return 'Este email ya tiene cuenta.';
+function showMsg(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+function xlateError(m) {
+  if (m.includes('Invalid login')) return 'Email o contraseña incorrectos.';
+  if (m.includes('Email not confirmed')) return 'Confirmá tu email antes de entrar.';
+  if (m.includes('already registered')) return 'Este email ya tiene cuenta. Iniciá sesión.';
   return m;
 }
 
-function showApp(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app-screen').style.display='block';
-  document.getElementById('fab').classList.remove('hidden');
-}
-function showLogin(){
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('app-screen').style.display='none';
-  document.getElementById('fab').classList.add('hidden');
-}
+// ── AUTH STATE ──
+// Hide both screens while we check session
+document.getElementById('login-screen').style.display = 'none';
 
-async function loadData(){
-  var r = await sb.from('user_data').select('data,last_day').eq('user_id',currentUser.id).single();
-  if(r.error && r.error.code!=='PGRST116') return;
-  if(r.data && r.data.data){
-    var d = r.data.data;
-    data = {
-      principios:   Array.isArray(d.principios)   ? d.principios   : DEFAULT.principios,
-      perspectivas: Array.isArray(d.perspectivas)  ? d.perspectivas : DEFAULT.perspectivas,
-      practicas:    Array.isArray(d.practicas)     ? d.practicas    : DEFAULT.practicas,
-      proyecto:     Array.isArray(d.proyecto)      ? d.proyecto     : DEFAULT.proyecto,
-      priming:      Array.isArray(d.priming)       ? d.priming      : DEFAULT.priming,
-      tasks:        Array.isArray(d.tasks)         ? d.tasks        : [],
-      openState:    (d.openState && typeof d.openState==='object') ? d.openState : {}
-    };
-    if(r.data.last_day !== new Date().toDateString()) data.tasks=[];
+sb.auth.getSession().then(async ({ data: { session } }) => {
+  if (session && session.user) {
+    currentUser = session.user;
+    await loadUserData();
+    render();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('logout-btn').style.display = 'block';
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
   }
+});
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session && session.user) {
+    currentUser = session.user;
+    await loadUserData();
+    render();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('logout-btn').style.display = 'block';
+  } else if (event === 'SIGNED_OUT') {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('logout-btn').style.display = 'none';
+  }
+});
+
+// ── HELPERS ──
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-async function saveData(){
-  if(!currentUser) return;
-  await sb.from('user_data').upsert(
-    {user_id:currentUser.id, data:data, last_day:new Date().toDateString()},
-    {onConflict:'user_id'}
-  );
+function getOpen(id) { return data.openState[id] !== false; }
+function setOpen(id, val) { data.openState[id] = val; save(); }
+
+// ── RENDER PRINCIPIOS ──
+function renderPrincipios() {
+  const list = document.getElementById('principios-list');
+  list.innerHTML = '';
+  data.principios.forEach((p, pi) => {
+    const id = 'principle-' + pi;
+    const isOpen = getOpen(id);
+    const wrap = document.createElement('div');
+    wrap.className = 'collapsible var-purple' + (isOpen ? ' open' : '');
+    wrap.id = id;
+    wrap.innerHTML =
+      '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
+        '<span class="coll-num">' + (pi+1) + '</span>' +
+        '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="' + pi + '">' + esc(p.label) + '</span>' +
+        '<span class="btn-delete" onclick="event.stopPropagation();deletePrincipio(' + pi + ')">✕</span>' +
+        '<span class="coll-chevron">▾</span>' +
+      '</div>' +
+      '<div class="coll-body">' +
+        p.children.map(function(c,ci) {
+          return '<div class="child-row">' +
+            '<div class="child-dot"></div>' +
+            '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="' + pi + '" data-ci="' + ci + '">' + esc(c) + '</div>' +
+            '<span class="btn-delete" onclick="deletePrincipleChild(' + pi + ',' + ci + ')">✕</span>' +
+          '</div>';
+        }).join('') +
+        '<button class="btn-add" style="margin-left:0" onclick="addPrincipleChild(' + pi + ')">+ Sub-item</button>' +
+      '</div>';
+    list.appendChild(wrap);
+  });
 }
 
-function save(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveData,800); }
+// ── RENDER PERSPECTIVAS ──
+function renderPerspectivas() {
+  const list = document.getElementById('perspectivas-list');
+  list.innerHTML = '';
+  data.perspectivas.forEach(function(p, pi) {
+    const id = 'perspectiva-' + pi;
+    const isOpen = getOpen(id);
+    const wrap = document.createElement('div');
+    wrap.className = 'collapsible var-green' + (isOpen ? ' open' : '');
+    wrap.id = id;
+    wrap.innerHTML =
+      '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
+        '<div class="coll-dot"></div>' +
+        '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="' + pi + '">' + esc(p.label) + '</span>' +
+        '<span class="btn-delete" onclick="event.stopPropagation();deletePerspectiva(' + pi + ')">✕</span>' +
+        '<span class="coll-chevron">▾</span>' +
+      '</div>' +
+      '<div class="coll-body">' +
+        p.children.map(function(c,ci) {
+          return '<div class="child-row">' +
+            '<div class="child-dot"></div>' +
+            '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="' + pi + '" data-ci="' + ci + '">' + esc(c) + '</div>' +
+            '<span class="btn-delete" onclick="deletePerspectivaChild(' + pi + ',' + ci + ')">✕</span>' +
+          '</div>';
+        }).join('') +
+        '<button class="btn-add" style="margin-left:0" onclick="addPerspectivaChild(' + pi + ')">+ Sub-item</button>' +
+      '</div>';
+    list.appendChild(wrap);
+  });
+}
 
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function getOpen(id){ return data.openState[id]!==false; }
-function setOpen(id,v){ data.openState[id]=v; save(); }
-
-function renderPrincipios(){
-  var list=document.getElementById('principios-list'); list.innerHTML='';
-  data.principios.forEach(function(p,pi){
-    var id='pr-'+pi, div=document.createElement('div');
-    div.className='collapsible var-purple'+(getOpen(id)?' open':''); div.id=id;
-    var ch=p.children.map(function(c,ci){
-      return '<div class="child-row"><div class="child-dot"></div>'+
-        '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="'+pi+'" data-ci="'+ci+'">'+esc(c)+'</div>'+
-        '<span class="btn-delete" onclick="delPrincipleChild('+pi+','+ci+')">&#x2715;</span></div>';
-    }).join('');
-    div.innerHTML='<div class="coll-trigger" onclick="toggleColl(\''+id+'\')">'+
-      '<span class="coll-num">'+(pi+1)+'</span>'+
-      '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="'+pi+'">'+esc(p.label)+'</span>'+
-      '<span class="btn-delete" onclick="event.stopPropagation();delPrincipio('+pi+')">&#x2715;</span>'+
-      '<span class="coll-chevron">&#9662;</span></div>'+
-      '<div class="coll-body">'+ch+'<button class="btn-add" style="margin-left:0" onclick="addPrincipleChild('+pi+')">+ Sub-item</button></div>';
+// ── RENDER PRÁCTICAS (Progreso) ──
+function renderPracticas() {
+  const list = document.getElementById('practicas-list');
+  list.innerHTML = '';
+  data.practicas.forEach(function(p, i) {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML =
+      '<div class="item-dot"></div>' +
+      '<div class="item-body">' +
+        '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="' + i + '">' + esc(p.text) + '</div>' +
+        '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="' + i + '">' + esc(p.sub) + '</div>' +
+      '</div>' +
+      '<span class="btn-delete" onclick="deletePractica(' + i + ')">✕</span>';
     list.appendChild(div);
   });
 }
 
-function renderPerspectivas(){
-  var list=document.getElementById('perspectivas-list'); list.innerHTML='';
-  data.perspectivas.forEach(function(p,pi){
-    var id='pe-'+pi, div=document.createElement('div');
-    div.className='collapsible var-green'+(getOpen(id)?' open':''); div.id=id;
-    var ch=p.children.map(function(c,ci){
-      return '<div class="child-row"><div class="child-dot"></div>'+
-        '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="'+pi+'" data-ci="'+ci+'">'+esc(c)+'</div>'+
-        '<span class="btn-delete" onclick="delPerspectivaChild('+pi+','+ci+')">&#x2715;</span></div>';
-    }).join('');
-    div.innerHTML='<div class="coll-trigger" onclick="toggleColl(\''+id+'\')">'+
-      '<div class="coll-dot"></div>'+
-      '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="'+pi+'">'+esc(p.label)+'</span>'+
-      '<span class="btn-delete" onclick="event.stopPropagation();delPerspectiva('+pi+')">&#x2715;</span>'+
-      '<span class="coll-chevron">&#9662;</span></div>'+
-      '<div class="coll-body">'+ch+'<button class="btn-add" style="margin-left:0" onclick="addPerspectivaChild('+pi+')">+ Sub-item</button></div>';
-    list.appendChild(div);
-  });
-}
-
-function renderPracticas(){
-  var list=document.getElementById('practicas-list'); list.innerHTML='';
-  data.practicas.forEach(function(p,i){
-    var div=document.createElement('div'); div.className='item';
-    div.innerHTML='<div class="item-dot"></div><div class="item-body">'+
-      '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="'+i+'">'+esc(p.text)+'</div>'+
-      '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="'+i+'">'+esc(p.sub)+'</div>'+
-      '</div><span class="btn-delete" onclick="delPractica('+i+')">&#x2715;</span>';
-    list.appendChild(div);
-  });
-}
-
-function renderProyecto(){
-  var tbody=document.getElementById('proyecto-body'); tbody.innerHTML='';
-  data.proyecto.forEach(function(row,i){
-    var tr=document.createElement('tr');
-    tr.innerHTML='<td style="width:calc(50% - 10px)"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="'+i+'">'+esc(row.no)+'</span></td>'+
-      '<td style="width:20px;text-align:center"><span class="arrow">&#8594;</span></td>'+
-      '<td style="width:calc(50% - 10px)"><div style="display:flex;gap:4px;align-items:center;">'+
-        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="'+i+'">'+esc(row.si)+'</span>'+
-        '<span class="btn-delete" onclick="delProyectoRow('+i+')">&#x2715;</span></div></td>';
+// ── RENDER PROYECTO ──
+function renderProyecto() {
+  const tbody = document.getElementById('proyecto-body');
+  tbody.innerHTML = '';
+  data.proyecto.forEach(function(row, i) {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="td-no"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="' + i + '">' + esc(row.no) + '</span></td>' +
+      '<td class="td-arr"><span class="arrow">→</span></td>' +
+      '<td class="td-si"><div style="display:flex;gap:4px;align-items:center;">' +
+        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="' + i + '">' + esc(row.si) + '</span>' +
+        '<span class="btn-delete" onclick="deleteProyectoRow(' + i + ')">✕</span>' +
+      '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
-function renderTasks(){
-  var list=document.getElementById('tasks-list'); list.innerHTML='';
-  data.tasks.forEach(function(t,i){
-    var div=document.createElement('div');
-    div.className='task-item'+(t.done?' done':'');
-    div.innerHTML='<div class="task-check" onclick="toggleTask('+i+')"></div>'+
-      '<span class="task-label" contenteditable="true" data-type="task-label" data-i="'+i+'" '+
-        'onblur="saveTaskLabel('+i+',this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">'+
-        esc(t.text)+'</span>'+
-      '<span class="task-delete" onclick="delTask('+i+')">&#x2715;</span>';
+// ── RENDER TASKS ──
+function renderTasks() {
+  const list = document.getElementById('tasks-list');
+  list.innerHTML = '';
+  data.tasks.forEach(function(t, i) {
+    const div = document.createElement('div');
+    div.className = 'task-item' + (t.done ? ' done' : '');
+    div.innerHTML =
+      '<div class="task-check" onclick="toggleTask(' + i + ')"></div>' +
+      '<span class="task-label" contenteditable="true" data-type="task-label" data-i="' + i + '" ' +
+        'onblur="saveTaskLabel(' + i + ',this)" ' +
+        'onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">' +
+        esc(t.text) +
+      '</span>' +
+      '<span class="task-delete" onclick="deleteTask(' + i + ')">✕</span>';
     list.appendChild(div);
   });
 }
 
-function renderPriming(){
-  var list=document.getElementById('priming-list'); list.innerHTML='';
-  data.priming.forEach(function(p,i){
-    var div=document.createElement('div'); div.className='item';
-    div.innerHTML='<div class="item-dot"></div><div class="item-body">'+
-      '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="'+i+'">'+esc(p.text)+'</div>'+
-      '</div><span class="btn-delete" onclick="delPrimingItem('+i+')">&#x2715;</span>';
+// ── RENDER PRIMING (Prácticas) ──
+function renderPriming() {
+  const list = document.getElementById('priming-list');
+  list.innerHTML = '';
+  data.priming.forEach(function(p, i) {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML =
+      '<div class="item-dot"></div>' +
+      '<div class="item-body">' +
+        '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="' + i + '">' + esc(p.text) + '</div>' +
+      '</div>' +
+      '<span class="btn-delete" onclick="deletePrimingItem(' + i + ')">✕</span>';
     list.appendChild(div);
   });
 }
 
-function render(){ renderPrincipios(); renderPerspectivas(); renderPracticas(); renderProyecto(); renderTasks(); renderPriming(); }
-
-function toggleColl(id){ var el=document.getElementById(id); setOpen(id,el.classList.toggle('open')); }
-function toggleTask(i){ data.tasks[i].done=!data.tasks[i].done; save(); renderTasks(); }
-function saveTaskLabel(i,el){ var v=(el.innerText||'').trim(); if(v){data.tasks[i].text=v; save();} }
-function addTask(){ var inp=document.getElementById('task-input'),txt=inp.value.trim(); if(!txt)return; data.tasks.push({text:txt,done:false}); inp.value=''; save(); renderTasks(); }
-function delTask(i){ data.tasks.splice(i,1); save(); renderTasks(); }
-
-function addPrincipio(){ data.principios.push({label:'Nuevo principio',children:[]}); render(); applyEdit(); }
-function delPrincipio(pi){ data.principios.splice(pi,1); save(); render(); applyEdit(); }
-function addPrincipleChild(pi){ data.principios[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('pr-'+pi).classList.add('open'); }
-function delPrincipleChild(pi,ci){ data.principios[pi].children.splice(ci,1); save(); render(); applyEdit(); }
-function addPerspectiva(){ data.perspectivas.push({label:'Nueva perspectiva',children:[]}); render(); applyEdit(); }
-function delPerspectiva(pi){ data.perspectivas.splice(pi,1); save(); render(); applyEdit(); }
-function addPerspectivaChild(pi){ data.perspectivas[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('pe-'+pi).classList.add('open'); }
-function delPerspectivaChild(pi,ci){ data.perspectivas[pi].children.splice(ci,1); save(); render(); applyEdit(); }
-function addPractica(){ data.practicas.push({text:'Nueva practica',sub:''}); render(); applyEdit(); }
-function delPractica(i){ data.practicas.splice(i,1); save(); render(); applyEdit(); }
-function addProyectoRow(){ data.proyecto.push({no:'No quiero...',si:'Quiero...'}); render(); applyEdit(); }
-function delProyectoRow(i){ data.proyecto.splice(i,1); save(); render(); applyEdit(); }
-function addPrimingItem(){ data.priming.push({text:'Nuevo habito'}); render(); applyEdit(); }
-function delPrimingItem(i){ data.priming.splice(i,1); save(); render(); applyEdit(); }
-
-function toggleEdit(){
-  editMode=!editMode;
-  document.body.classList.toggle('editing',editMode);
-  var fab=document.getElementById('fab');
-  fab.classList.toggle('active',editMode);
-  fab.innerHTML=editMode?'&#x2713;':'&#x270F;&#xFE0F;';
-  document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el){ el.contentEditable=editMode?'true':'false'; });
-  if(!editMode){ collectEdits(); save(); showToast('Guardado'); }
+function render() {
+  renderPrincipios();
+  renderPerspectivas();
+  renderPracticas();
+  renderProyecto();
+  renderTasks();
+  renderPriming();
 }
 
-function applyEdit(){
-  if(!editMode) return;
-  document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el){ el.contentEditable='true'; });
+// ── COLLAPSIBLE ──
+function toggleColl(id) {
+  const el = document.getElementById(id);
+  const nowOpen = el.classList.toggle('open');
+  setOpen(id, nowOpen);
 }
 
-function collectEdits(){
-  document.querySelectorAll('[data-type]').forEach(function(el){
-    var v=(el.innerText||'').trim(); if(!v) return;
-    var t=el.dataset.type, i=parseInt(el.dataset.i)||0, pi=parseInt(el.dataset.pi)||0, ci=parseInt(el.dataset.ci)||0;
-    if(t==='principle-label'   && data.principios[pi])   data.principios[pi].label=v;
-    if(t==='principle-child'   && data.principios[pi])   data.principios[pi].children[ci]=v;
-    if(t==='perspectiva-label' && data.perspectivas[pi]) data.perspectivas[pi].label=v;
-    if(t==='perspectiva-child' && data.perspectivas[pi]) data.perspectivas[pi].children[ci]=v;
-    if(t==='practica-text'     && data.practicas[i])     data.practicas[i].text=v;
-    if(t==='practica-sub'      && data.practicas[i])     data.practicas[i].sub=v;
-    if(t==='proyecto-no'       && data.proyecto[i])      data.proyecto[i].no=v;
-    if(t==='proyecto-si'       && data.proyecto[i])      data.proyecto[i].si=v;
-    if(t==='priming-text'      && data.priming[i])       data.priming[i].text=v;
+// ── TASKS ──
+function toggleTask(i) { data.tasks[i].done = !data.tasks[i].done; save(); renderTasks(); }
+function saveTaskLabel(i, el) {
+  const v = el.innerText.trim();
+  if (v && data.tasks[i]) { data.tasks[i].text = v; save(); }
+}
+function addTask() {
+  const inp = document.getElementById('task-input');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  data.tasks.push({ text: txt, done: false });
+  inp.value = '';
+  save(); renderTasks();
+}
+function deleteTask(i) { data.tasks.splice(i,1); save(); renderTasks(); }
+
+// ── ADD / DELETE ──
+function addPrincipio() { data.principios.push({ label:'Nuevo principio', children:[] }); render(); applyEdit(); }
+function deletePrincipio(pi) { data.principios.splice(pi,1); save(); render(); applyEdit(); }
+function addPrincipleChild(pi) { data.principios[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('principle-'+pi).classList.add('open'); }
+function deletePrincipleChild(pi,ci) { data.principios[pi].children.splice(ci,1); save(); render(); applyEdit(); document.getElementById('principle-'+pi).classList.add('open'); }
+
+function addPerspectiva() { data.perspectivas.push({ label:'Nueva perspectiva', children:[] }); render(); applyEdit(); }
+function deletePerspectiva(pi) { data.perspectivas.splice(pi,1); save(); render(); applyEdit(); }
+function addPerspectivaChild(pi) { data.perspectivas[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('perspectiva-'+pi).classList.add('open'); }
+function deletePerspectivaChild(pi,ci) { data.perspectivas[pi].children.splice(ci,1); save(); render(); applyEdit(); document.getElementById('perspectiva-'+pi).classList.add('open'); }
+
+function addPractica() { data.practicas.push({ text:'Nueva práctica', sub:'' }); render(); applyEdit(); }
+function deletePractica(i) { data.practicas.splice(i,1); save(); render(); applyEdit(); }
+
+function addProyectoRow() { data.proyecto.push({ no:'No quiero…', si:'Quiero…' }); render(); applyEdit(); }
+function deleteProyectoRow(i) { data.proyecto.splice(i,1); save(); render(); applyEdit(); }
+
+function addPrimingItem() { data.priming.push({ text:'Nuevo hábito' }); render(); applyEdit(); }
+function deletePrimingItem(i) { data.priming.splice(i,1); save(); render(); applyEdit(); }
+
+// ── EDIT MODE ──
+let editMode = false;
+function toggleEdit() {
+  editMode = !editMode;
+  document.body.classList.toggle('editing', editMode);
+  document.getElementById('fab').classList.toggle('active', editMode);
+  document.getElementById('fab').textContent = editMode ? '✓' : '✏️';
+  document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el) {
+    el.contentEditable = editMode ? 'true' : 'false';
+  });
+  if (!editMode) { collectEdits(); save(); showToast('Cambios guardados ✓'); }
+}
+function applyEdit() {
+  if (!editMode) return;
+  document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el) {
+    el.contentEditable = 'true';
+  });
+}
+function collectEdits() {
+  // Safe: guard every write against the array still existing at that index
+  document.querySelectorAll('[data-type]').forEach(function(el) {
+    const v = el.innerText.trim();
+    const t = el.dataset.type;
+    const i  = +el.dataset.i;
+    const pi = +el.dataset.pi;
+    const ci = +el.dataset.ci;
+    if (!v) return; // never write empty strings
+    if (t === 'principle-label'    && data.principios[pi])                        data.principios[pi].label = v;
+    else if (t === 'principle-child'    && data.principios[pi] && data.principios[pi].children[ci] !== undefined) data.principios[pi].children[ci] = v;
+    else if (t === 'perspectiva-label'  && data.perspectivas[pi])                 data.perspectivas[pi].label = v;
+    else if (t === 'perspectiva-child'  && data.perspectivas[pi] && data.perspectivas[pi].children[ci] !== undefined) data.perspectivas[pi].children[ci] = v;
+    else if (t === 'practica-text'      && data.practicas[i])                     data.practicas[i].text = v;
+    else if (t === 'practica-sub'       && data.practicas[i])                     data.practicas[i].sub  = v;
+    else if (t === 'proyecto-no'        && data.proyecto[i])                      data.proyecto[i].no    = v;
+    else if (t === 'proyecto-si'        && data.proyecto[i])                      data.proyecto[i].si    = v;
+    else if (t === 'priming-text'       && data.priming[i])                       data.priming[i].text   = v;
   });
 }
 
-var toastTimer;
-function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('show');},2000); }
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
 
-var OBSTACLES=[
-  {emoji:'&#x1F636;',label:'Procrastinando'},
-  {emoji:'&#x1F300;',label:'Desenfocado'},
-  {emoji:'&#x2753;', label:'Incertidumbre'},
-  {emoji:'&#x1F62C;',label:'Evitacion emocional'},
-  {emoji:'&#x1F9CA;',label:'Paralisis por analisis'},
-  {emoji:'&#x1FAAB;',label:'Desmotivado'}
+// ── RESCUE MODAL ──
+const OBSTACLES = [
+  { emoji:'😶', label:'Procrastinando' },
+  { emoji:'🌀', label:'Desenfocado' },
+  { emoji:'❓', label:'Incertidumbre' },
+  { emoji:'😬', label:'Evitación emocional' },
+  { emoji:'🧊', label:'Parálisis por análisis' },
+  { emoji:'🪫', label:'Desmotivado' }
 ];
-var OCFG={
-  'Procrastinando':         {color:'var(--blue)',   pregunta:'Como haria esto si no pudiera avergonzarme ni ser duro conmigo?',                   hint:'El objetivo ahora no es terminar. Es empezar.',          principios:[0,1],perspectivas:[0],practicas:[0]},
-  'Desenfocado':            {color:'var(--purple)', pregunta:'Que distraccion puedo eliminar ahora mismo para hacer la concentracion mas facil?', hint:'El foco no es fuerza de voluntad, es reducir opciones.', principios:[1],  perspectivas:[0],practicas:[1]},
-  'Incertidumbre':          {color:'var(--green)',  pregunta:'Que es lo que ya sabes? Que minimo necesitas saber para dar el siguiente paso?',    hint:'La claridad viene de hacer, no de pensar.',              principios:[0,2],perspectivas:[0],practicas:[2]},
-  'Evitacion emocional':    {color:'#b45309',       pregunta:'Que emocion estas evitando? Que pasaria si la dejaras estar sin actuar?',           hint:'Nombrar la emocion le quita potencia.',                  principios:[2],  perspectivas:[0,1],practicas:[0]},
-  'Paralisis por analisis': {color:'var(--slate)',  pregunta:'Que informacion adicional cambiaria tu decision? Si no sabes, ya tenes suficiente.',hint:'Decidir mal y corregir es mejor que no decidir.',        principios:[0,2],perspectivas:[1],practicas:[2]},
-  'Desmotivado':            {color:'var(--green)',  pregunta:'Estas haciendo esto porque queres o porque sentis que deberias?',                   hint:'La curiosidad es la puerta de entrada a la motivacion.', principios:[1,2],perspectivas:[1],practicas:[0]}
+
+function openRescue() {
+  document.getElementById('rescue-step-1').classList.remove('hidden');
+  document.getElementById('rescue-step-2').classList.add('hidden');
+  const opts = document.getElementById('rescue-options');
+  opts.innerHTML = '';
+  OBSTACLES.forEach(function(o) {
+    const btn = document.createElement('div');
+    btn.className = 'rescue-option';
+    btn.innerHTML = '<span class="rescue-option-emoji">' + o.emoji + '</span><span class="rescue-option-label">' + o.label + '</span>';
+    btn.onclick = function() { showRescueResponse(o.label); };
+    opts.appendChild(btn);
+  });
+  document.getElementById('rescueOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRescue() {
+  document.getElementById('rescueOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function maybeCloseRescue(e) {
+  if (e.target === document.getElementById('rescueOverlay')) closeRescue();
+}
+
+function rescueBack() {
+  document.getElementById('rescue-step-1').classList.remove('hidden');
+  document.getElementById('rescue-step-2').classList.add('hidden');
+}
+
+// ── RESCUE: dynamic responses from data ──
+const OBSTACLE_CONFIG = {
+  'Procrastinando': {
+    color:'var(--blue)',
+    pregunta:'¿Cómo haría esto si no pudiera avergonzarme ni ser duro conmigo?',
+    principios:[0,1], perspectivas:[0], practicas:[0],
+    hint:'El objetivo ahora no es terminar. Es empezar.'
+  },
+  'Desenfocado': {
+    color:'var(--purple)',
+    pregunta:'¿Qué distracción puedo eliminar ahora mismo para hacer la concentración más fácil?',
+    principios:[1], perspectivas:[0], practicas:[1],
+    hint:'El foco no es fuerza de voluntad — es reducir opciones.'
+  },
+  'Incertidumbre': {
+    color:'var(--green)',
+    pregunta:'¿Qué es lo que ya sabés? ¿Qué es lo mínimo que necesitás saber para dar el siguiente paso?',
+    principios:[0,2], perspectivas:[0], practicas:[2],
+    hint:'La claridad viene de hacer, no de pensar.'
+  },
+  'Evitación emocional': {
+    color:'#b45309',
+    pregunta:'¿Qué emoción estás evitando? ¿Qué pasaría si la dejaras estar sin actuar sobre ella?',
+    principios:[2], perspectivas:[0,1], practicas:[0],
+    hint:'Nombrar la emoción le quita potencia.'
+  },
+  'Parálisis por análisis': {
+    color:'var(--slate)',
+    pregunta:'¿Qué información adicional cambiaría realmente tu decisión? Si no sabés, ya tenés suficiente.',
+    principios:[0,2], perspectivas:[1], practicas:[2],
+    hint:'Decidir mal y corregir es mejor que no decidir.'
+  },
+  'Desmotivado': {
+    color:'var(--green)',
+    pregunta:'¿Estás haciendo esto porque querés o porque sentís que deberías?',
+    principios:[1,2], perspectivas:[1], practicas:[0],
+    hint:'La curiosidad es la puerta de entrada a la motivación.'
+  }
 };
 
-function buildRescueCards(cfg){
-  var cards=[];
-  cfg.principios.forEach(function(idx){ var p=data.principios[idx]; if(!p)return;
-    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--purple)">Principio</div><div class="rescue-card-text">'+esc(p.label)+'</div>'+(p.children.length?'<div class="rescue-card-hint">&#8627; '+esc(p.children.slice(0,2).join(' · '))+'</div>':'')+'</div>'); });
-  cfg.perspectivas.forEach(function(idx){ var p=data.perspectivas[idx]; if(!p)return;
-    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--green)">Perspectiva</div><div class="rescue-card-text">'+esc(p.label)+'</div>'+(p.children.length?'<div class="rescue-card-hint">&#8627; '+esc(p.children[0])+'</div>':'')+'</div>'); });
-  cfg.practicas.forEach(function(idx){ var p=data.practicas[idx]; if(!p)return;
-    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--blue)">Progreso</div><div class="rescue-card-text">'+esc(p.text)+'</div>'+(p.sub?'<div class="rescue-card-hint">&#8627; '+esc(p.sub)+'</div>':'')+'</div>'); });
+function buildRescueCards(config) {
+  const cards = [];
+  config.principios.forEach(function(idx) {
+    const p = data.principios[idx]; if (!p) return;
+    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--purple)">Principio</div>' +
+      '<div class="rescue-card-text">' + esc(p.label) + '</div>' +
+      (p.children.length ? '<div class="rescue-card-hint">↳ ' + p.children.slice(0,2).join(' · ') + '</div>' : '') + '</div>');
+  });
+  config.perspectivas.forEach(function(idx) {
+    const p = data.perspectivas[idx]; if (!p) return;
+    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--green)">Perspectiva</div>' +
+      '<div class="rescue-card-text">' + esc(p.label) + '</div>' +
+      (p.children.length ? '<div class="rescue-card-hint">↳ ' + esc(p.children[0]) + '</div>' : '') + '</div>');
+  });
+  config.practicas.forEach(function(idx) {
+    const p = data.practicas[idx]; if (!p) return;
+    cards.push('<div class="rescue-card"><div class="rescue-card-label" style="color:var(--blue)">Progreso</div>' +
+      '<div class="rescue-card-text">' + esc(p.text) + '</div>' +
+      (p.sub ? '<div class="rescue-card-hint">↳ ' + esc(p.sub) + '</div>' : '') + '</div>');
+  });
   return cards.join('');
 }
 
-function openRescue(){
-  document.getElementById('rescue-step-1').classList.remove('hidden');
-  document.getElementById('rescue-step-2').classList.add('hidden');
-  var opts=document.getElementById('rescue-options'); opts.innerHTML='';
-  OBSTACLES.forEach(function(o){ var btn=document.createElement('div'); btn.className='rescue-option';
-    btn.innerHTML='<span class="rescue-option-emoji">'+o.emoji+'</span><span class="rescue-option-label">'+o.label+'</span>';
-    btn.onclick=function(){showRescueResponse(o.label);}; opts.appendChild(btn); });
-  document.getElementById('rescueOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeRescue(){ document.getElementById('rescueOverlay').classList.remove('open'); document.body.style.overflow=''; }
-function maybeCloseRescue(e){ if(e.target===document.getElementById('rescueOverlay'))closeRescue(); }
-function rescueBack(){ document.getElementById('rescue-step-1').classList.remove('hidden'); document.getElementById('rescue-step-2').classList.add('hidden'); }
-function showRescueResponse(label){
-  var cfg=OCFG[label], obs=OBSTACLES.filter(function(o){return o.label===label;})[0];
+function showRescueResponse(label) {
+  const config = OBSTACLE_CONFIG[label];
+  const obs = OBSTACLES.find(function(o) { return o.label === label; });
   document.getElementById('rescue-step-1').classList.add('hidden');
   document.getElementById('rescue-step-2').classList.remove('hidden');
-  document.getElementById('rescue-response').innerHTML=
-    '<div class="rescue-response-title">'+obs.emoji+' '+label+'</div>'+
-    '<div class="rescue-card" style="border-left:3px solid '+cfg.color+';background:var(--surface);">'+
-      '<div class="rescue-card-label" style="color:'+cfg.color+'">Pregunta clave</div>'+
-      '<div class="rescue-card-text">'+cfg.pregunta+'</div>'+
-      (cfg.hint?'<div class="rescue-card-hint">&#8627; '+cfg.hint+'</div>':'')+
-    '</div>'+buildRescueCards(cfg);
+  document.getElementById('rescue-response').innerHTML =
+    '<div class="rescue-response-title">' + obs.emoji + ' ' + label + '</div>' +
+    '<div class="rescue-card" style="border-left:3px solid ' + config.color + ';background:var(--surface);">' +
+      '<div class="rescue-card-label" style="color:' + config.color + '">Pregunta clave</div>' +
+      '<div class="rescue-card-text">' + config.pregunta + '</div>' +
+      (config.hint ? '<div class="rescue-card-hint">↳ ' + config.hint + '</div>' : '') +
+    '</div>' +
+    buildRescueCards(config);
 }
 
-// INIT
-var _d=new Date();
-var days=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
-var daysFull=['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
-var months=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-document.getElementById('dateMeta').textContent=days[_d.getDay()]+' \u00b7 '+_d.getDate()+' '+months[_d.getMonth()]+' \u00b7 '+_d.getFullYear();
-document.getElementById('day-name').textContent=daysFull[_d.getDay()];
-
-document.getElementById('login-screen').style.display='none';
-document.getElementById('app-screen').style.display='none';
-
-sb.auth.getSession().then(async function(r){
-  var s=r.data&&r.data.session;
-  if(s&&s.user){ currentUser=s.user; await loadData(); render(); showApp(); }
-  else showLogin();
-});
-
-sb.auth.onAuthStateChange(async function(event,session){
-  if(event==='SIGNED_IN'&&session&&session.user){ currentUser=session.user; await loadData(); render(); showApp(); }
-  else if(event==='SIGNED_OUT') showLogin();
-});
-
-window.signIn=signIn; window.signUp=signUp; window.doLogout=doLogout; window.showForm=showForm;
-window.toggleColl=toggleColl; window.toggleTask=toggleTask; window.saveTaskLabel=saveTaskLabel;
-window.addTask=addTask; window.delTask=delTask;
-window.addPrincipio=addPrincipio; window.delPrincipio=delPrincipio;
-window.addPrincipleChild=addPrincipleChild; window.delPrincipleChild=delPrincipleChild;
-window.addPerspectiva=addPerspectiva; window.delPerspectiva=delPerspectiva;
-window.addPerspectivaChild=addPerspectivaChild; window.delPerspectivaChild=delPerspectivaChild;
-window.addPractica=addPractica; window.delPractica=delPractica;
-window.addProyectoRow=addProyectoRow; window.delProyectoRow=delProyectoRow;
-window.addPrimingItem=addPrimingItem; window.delPrimingItem=delPrimingItem;
-window.toggleEdit=toggleEdit; window.openRescue=openRescue; window.closeRescue=closeRescue;
-window.maybeCloseRescue=maybeCloseRescue; window.rescueBack=rescueBack; window.showRescueResponse=showRescueResponse;
-
-})();
-</script>
-</body>
-</html>
+// ── INIT ──
+const _d = new Date();
+const days   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const daysFull = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+document.getElementById('dateMeta').textContent = days[_d.getDay()] + ' · ' + _d.getDate() + ' ' + months[_d.getMonth()] + ' · ' + _d.getFullYear();
+document.getElementById('day-name').textContent = daysFull[_d.getDay()];
+</script></html>
