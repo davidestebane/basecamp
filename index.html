@@ -394,11 +394,16 @@ async function signUp() {
 }
 
 async function logout() {
-  await sb.auth.signOut();
+  try { await sb.auth.signOut(); } catch(e) {}
   currentUser = null;
+  data = JSON.parse(JSON.stringify(DEFAULT));
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('fab').style.display = 'none';
+  document.getElementById('signin-email').value = '';
+  document.getElementById('signin-password').value = '';
+  document.getElementById('signin-error').style.display = 'none';
+  toggleForm('signin');
 }
 
 function showAuthError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
