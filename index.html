@@ -182,108 +182,51 @@ body.editing .btn-delete{display:block;}
 }
 
 /* ── Login ── */
-#login-screen{
-  position:fixed;inset:0;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  padding:24px;z-index:500;
-}
-.login-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:20px;
-  padding:40px 36px;width:100%;max-width:360px;
-  box-shadow:0 8px 40px rgba(0,0,0,.08);
-  display:flex;flex-direction:column;gap:22px;
-}
-.login-title{font-family:'Fraunces',serif;font-size:26px;font-weight:400;letter-spacing:-.02em;line-height:1.1;text-align:center;}
-.login-title em{font-style:italic;color:var(--green);}
-.login-by{font-size:13px;font-style:italic;color:var(--text-3);margin-top:3px;font-family:'Fraunces',serif;font-weight:300;text-align:center;}
-.login-fields{display:flex;flex-direction:column;gap:12px;}
-.login-field{display:flex;flex-direction:column;gap:5px;}
-.login-field label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;}
-.login-input{
-  width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);
-  background:var(--bg);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-1);
-  outline:none;transition:border-color .15s,box-shadow .15s;
-}
-.login-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:#fff;}
-.login-btn{
-  width:100%;padding:12px;border-radius:10px;border:none;
-  background:var(--text-1);color:#fff;font-size:14px;font-weight:500;
-  font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .18s;margin-top:2px;
-}
-.login-btn:hover{background:#2d2c29;}
-.login-btn:disabled{opacity:.5;cursor:not-allowed;}
-.login-toggle{font-size:12px;color:var(--text-3);text-align:center;}
-.login-toggle a{color:var(--green);text-decoration:underline;cursor:pointer;}
-.login-msg{font-size:12px;border-radius:8px;padding:9px 13px;display:none;line-height:1.5;}
-.login-msg.err{color:#dc2626;background:#fef2f2;border:1px solid #fecaca;}
-.login-msg.ok{color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);}
-.logout-btn{
-  height:30px;padding:0 12px;border-radius:8px;background:var(--surface);
-  border:1px solid var(--border);font-size:11px;color:var(--text-3);
-  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;
-}
-.logout-btn:hover{color:var(--text-1);border-color:var(--border-strong);}
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;z-index:500;}
+.lc{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:20px;}
+.lt{font-family:'Fraunces',serif;font-size:26px;font-weight:400;letter-spacing:-.02em;text-align:center;}
+.lt em{font-style:italic;color:var(--green);}
+.lby{font-size:13px;font-style:italic;color:var(--text-3);text-align:center;font-family:'Fraunces',serif;font-weight:300;margin-top:-10px;}
+.lf{display:flex;flex-direction:column;gap:11px;}
+.lfl{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;display:block;margin-bottom:4px;}
+.lfi{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-1);outline:none;}
+.lfi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:#fff;}
+.lbtn{width:100%;padding:12px;border-radius:10px;border:none;background:var(--text-1);color:#fff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.lbtn:hover{background:#2d2c29;}
+.lerr{font-size:12px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 13px;display:none;}
+.ltog{font-size:12px;color:var(--text-3);text-align:center;}
+.ltog a{color:var(--green);text-decoration:underline;cursor:pointer;}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen" style="display:none">
-  <div class="login-card">
-    <div>
-      <div class="login-title">Base <em>Camp</em></div>
-      <div class="login-by">by David Elorza</div>
+<div id="login-screen">
+  <div class="lc">
+    <div class="lt">Base <em>Camp</em></div>
+    <div class="lby">by David Elorza</div>
+    <div id="form-in" class="lf">
+      <div><label class="lfl">Email</label><input class="lfi" id="si-e" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <div><label class="lfl">Contraseña</label><input class="lfi" id="si-p" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <button class="lbtn" onclick="doSignIn()">Entrar</button>
+      <div class="lerr" id="si-err"></div>
+      <div class="ltog">¿No tenés cuenta? <a onclick="showForm('up')">Crear una</a></div>
     </div>
-
-    <!-- signin form -->
-    <div id="form-signin">
-      <div class="login-fields">
-        <div class="login-field">
-          <label>Email</label>
-          <input class="login-input" id="si-email" type="email" placeholder="tu@email.com" autocomplete="email">
-        </div>
-        <div class="login-field">
-          <label>Contraseña</label>
-          <input class="login-input" id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password"
-            onkeydown="if(event.key==='Enter')doSignIn()">
-        </div>
-        <button class="login-btn" id="si-btn" onclick="doSignIn()">Entrar</button>
-        <div class="login-msg err" id="si-err"></div>
-      </div>
-      <div style="height:10px"></div>
-      <div class="login-toggle">¿No tenés cuenta? <a onclick="showForm('up')">Crear una</a></div>
-    </div>
-
-    <!-- signup form -->
-    <div id="form-signup" style="display:none">
-      <div class="login-fields">
-        <div class="login-field">
-          <label>Email</label>
-          <input class="login-input" id="su-email" type="email" placeholder="tu@email.com" autocomplete="email">
-        </div>
-        <div class="login-field">
-          <label>Contraseña</label>
-          <input class="login-input" id="su-pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"
-            onkeydown="if(event.key==='Enter')doSignUp()">
-        </div>
-        <button class="login-btn" id="su-btn" onclick="doSignUp()">Crear cuenta</button>
-        <div class="login-msg err" id="su-err"></div>
-        <div class="login-msg ok" id="su-ok">¡Listo! Revisá tu email para confirmar la cuenta.</div>
-      </div>
-      <div style="height:10px"></div>
-      <div class="login-toggle">¿Ya tenés cuenta? <a onclick="showForm('in')">Iniciá sesión</a></div>
+    <div id="form-up" class="lf" style="display:none">
+      <div><label class="lfl">Email</label><input class="lfi" id="su-e" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')doSignUp()"></div>
+      <div><label class="lfl">Contraseña (mín. 6 caracteres)</label><input class="lfi" id="su-p" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignUp()"></div>
+      <button class="lbtn" onclick="doSignUp()">Crear cuenta</button>
+      <div class="lerr" id="su-err"></div>
+      <div class="ltog">¿Ya tenés cuenta? <a onclick="showForm('in')">Iniciá sesión</a></div>
     </div>
   </div>
 </div>
 
-
 <div class="page-header">
-  <div class="page-title">Base <em>Camp</em> <span style="font-size:14px;font-style:italic;color:var(--text-3);font-family:'Fraunces',serif;font-weight:300;">by David Elorza</span></div>
+  <div class="page-title">Base <em>Camp</em></div>
   <div class="header-right">
     <button class="rescue-btn" onclick="openRescue()" title="¿Qué te tiene atascado?">⚡</button>
     <div class="page-meta" id="dateMeta">—</div>
-    <button class="logout-btn" id="logout-btn" onclick="doLogout()" style="display:none">Salir</button>
+    <button id="logout-btn" onclick="doLogout()" style="height:30px;padding:0 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:11px;color:var(--text-3);cursor:pointer;font-family:'DM Sans',sans-serif;display:none">Salir</button>
   </div>
 </div>
 
@@ -385,14 +328,78 @@ body.editing .btn-delete{display:block;}
 </div>
 
 <script>
-// ── SUPABASE ──
-const SUPA_URL = 'https://kridwawynaampaikrlal.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWR3YXd5bmFhbXBhaWtybGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODIyMzEsImV4cCI6MjA4ODc1ODIzMX0.UKY7XANWAOQPsyjInjqnXX9HOYmRyQ7XeK-MCu3To50';
-const sb = supabase.createClient(SUPA_URL, SUPA_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true }
-});
+// ──────────────────────────────────────────────
+// AUTH (localStorage-based, session expires in 7 days)
+// ──────────────────────────────────────────────
+const SESSION_KEY = 'bc_session';
+const DATA_PREFIX  = 'bc_data_';
+const SESSION_DAYS = 7;
 
-// ── DATA ──
+function getSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if (!s) return null;
+    if (Date.now() > s.exp) { localStorage.removeItem(SESSION_KEY); return null; }
+    return s;
+  } catch(e) { return null; }
+}
+
+function createSession(email) {
+  const s = { email, exp: Date.now() + SESSION_DAYS * 86400000 };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+  return s;
+}
+
+function showForm(which) {
+  document.getElementById('form-in').style.display = which === 'in' ? 'flex' : 'none';
+  document.getElementById('form-up').style.display = which === 'up' ? 'flex' : 'none';
+}
+
+function doSignIn() {
+  const email = (document.getElementById('si-e').value || '').trim().toLowerCase();
+  const pass  =  document.getElementById('si-p').value || '';
+  const err   =  document.getElementById('si-err');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Completá los dos campos.'; err.style.display = 'block'; return; }
+  const accounts = JSON.parse(localStorage.getItem('bc_accounts') || '{}');
+  if (!accounts[email]) { err.textContent = 'No existe cuenta con ese email.'; err.style.display = 'block'; return; }
+  if (accounts[email] !== pass) { err.textContent = 'Contraseña incorrecta.'; err.style.display = 'block'; return; }
+  currentUser = createSession(email);
+  bootApp();
+}
+
+function doSignUp() {
+  const email = (document.getElementById('su-e').value || '').trim().toLowerCase();
+  const pass  =  document.getElementById('su-p').value || '';
+  const err   =  document.getElementById('su-err');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Completá los dos campos.'; err.style.display = 'block'; return; }
+  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres.'; err.style.display = 'block'; return; }
+  const accounts = JSON.parse(localStorage.getItem('bc_accounts') || '{}');
+  if (accounts[email]) { err.textContent = 'Ya existe una cuenta con ese email.'; err.style.display = 'block'; return; }
+  accounts[email] = pass;
+  localStorage.setItem('bc_accounts', JSON.stringify(accounts));
+  currentUser = createSession(email);
+  bootApp();
+}
+
+function doLogout() {
+  localStorage.removeItem(SESSION_KEY);
+  currentUser = null;
+  data = loadData(); // reset to default
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('logout-btn').style.display = 'none';
+  document.getElementById('si-e').value = '';
+  document.getElementById('si-p').value = '';
+  document.getElementById('si-err').style.display = 'none';
+  showForm('in');
+}
+
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+let currentUser = null;
+
 const DEFAULT = {
   principios: [
     { label:'Todo es una iteración', children:['Cambiá "modo desempeño" por "modo experimento" — hacé la v0.1.','Tomá acción imperfecta, incompleta e insegura.','Desmantela el pensamiento todo-o-nada.'] },
@@ -424,148 +431,28 @@ const DEFAULT = {
   openState: {}
 };
 
-// ── PERSISTENCE (Supabase + localStorage fallback) ──
-let currentUser = null;
-let data = JSON.parse(JSON.stringify(DEFAULT));
-let saveTimer = null;
-
-async function loadUserData() {
-  // try Supabase first
+function loadData() {
+  if (!currentUser) return JSON.parse(JSON.stringify(DEFAULT));
   try {
-    const { data: row, error } = await sb.from('user_data')
-      .select('data, last_day')
-      .eq('user_id', currentUser.id)
-      .single();
-    if (!error && row && row.data) {
-      const d = row.data;
-      data = {
-        principios:   Array.isArray(d.principios)   ? d.principios   : DEFAULT.principios,
-        perspectivas: Array.isArray(d.perspectivas)  ? d.perspectivas : DEFAULT.perspectivas,
-        practicas:    Array.isArray(d.practicas)     ? d.practicas    : DEFAULT.practicas,
-        proyecto:     Array.isArray(d.proyecto)      ? d.proyecto     : DEFAULT.proyecto,
-        priming:      Array.isArray(d.priming)       ? d.priming      : DEFAULT.priming,
-        tasks:        Array.isArray(d.tasks)         ? d.tasks        : [],
-        openState:    (d.openState && typeof d.openState === 'object') ? d.openState : {}
-      };
-      if (row.last_day !== new Date().toDateString()) data.tasks = [];
-      return;
-    }
-  } catch(e) {}
-  // fallback: localStorage
-  try {
-    const s = localStorage.getItem('msb_' + currentUser.id);
-    if (s) {
-      const saved = JSON.parse(s);
-      if (saved.lastDay !== new Date().toDateString()) saved.tasks = [];
-      if (!saved.openState) saved.openState = {};
-      data = saved;
-    }
-  } catch(e) {}
+    const key = DATA_PREFIX + currentUser.email;
+    const s = localStorage.getItem(key);
+    if (!s) return JSON.parse(JSON.stringify(DEFAULT));
+    const saved = JSON.parse(s);
+    const today = new Date().toDateString();
+    if (saved.lastDay !== today) { saved.tasks = []; saved.lastDay = today; }
+    if (!saved.openState) saved.openState = {};
+    return saved;
+  } catch(e) { return JSON.parse(JSON.stringify(DEFAULT)); }
 }
 
 function save() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async function() {
-    data.lastDay = new Date().toDateString();
-    // save to localStorage immediately as backup
-    if (currentUser) localStorage.setItem('msb_' + currentUser.id, JSON.stringify(data));
-    // save to Supabase if logged in
-    if (currentUser) {
-      try {
-        await sb.from('user_data').upsert(
-          { user_id: currentUser.id, data: data, last_day: data.lastDay },
-          { onConflict: 'user_id' }
-        );
-      } catch(e) {}
-    }
-  }, 600);
+  if (!currentUser) return;
+  data.lastDay = new Date().toDateString();
+  localStorage.setItem(DATA_PREFIX + currentUser.email, JSON.stringify(data));
 }
 
-// ── AUTH UI ──
-function showForm(which) {
-  document.getElementById('form-signin').style.display = which === 'in' ? 'block' : 'none';
-  document.getElementById('form-signup').style.display = which === 'up' ? 'block' : 'none';
-}
+let data = JSON.parse(JSON.stringify(DEFAULT));
 
-async function doSignIn() {
-  const email = document.getElementById('si-email').value.trim();
-  const pass  = document.getElementById('si-pass').value;
-  const btn   = document.getElementById('si-btn');
-  const err   = document.getElementById('si-err');
-  err.style.display = 'none';
-  if (!email || !pass) { showMsg(err, 'Completá los dos campos.'); return; }
-  btn.disabled = true; btn.textContent = 'Entrando…';
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  btn.disabled = false; btn.textContent = 'Entrar';
-  if (error) showMsg(err, xlateError(error.message));
-}
-
-async function doSignUp() {
-  const email = document.getElementById('su-email').value.trim();
-  const pass  = document.getElementById('su-pass').value;
-  const btn   = document.getElementById('su-btn');
-  const err   = document.getElementById('su-err');
-  const ok    = document.getElementById('su-ok');
-  err.style.display = 'none'; ok.style.display = 'none';
-  if (!email || !pass) { showMsg(err, 'Completá los dos campos.'); return; }
-  if (pass.length < 6) { showMsg(err, 'La contraseña debe tener al menos 6 caracteres.'); return; }
-  btn.disabled = true; btn.textContent = 'Creando cuenta…';
-  const { error } = await sb.auth.signUp({ email, password: pass });
-  btn.disabled = false; btn.textContent = 'Crear cuenta';
-  if (error) { showMsg(err, xlateError(error.message)); return; }
-  ok.style.display = 'block';
-}
-
-async function doLogout() {
-  try { await sb.auth.signOut(); } catch(e) {}
-  currentUser = null;
-  data = JSON.parse(JSON.stringify(DEFAULT));
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('logout-btn').style.display = 'none';
-  document.getElementById('si-email').value = '';
-  document.getElementById('si-pass').value = '';
-  document.getElementById('si-err').style.display = 'none';
-  showForm('in');
-}
-
-function showMsg(el, msg) { el.textContent = msg; el.style.display = 'block'; }
-function xlateError(m) {
-  if (m.includes('Invalid login')) return 'Email o contraseña incorrectos.';
-  if (m.includes('Email not confirmed')) return 'Confirmá tu email antes de entrar.';
-  if (m.includes('already registered')) return 'Este email ya tiene cuenta. Iniciá sesión.';
-  return m;
-}
-
-// ── AUTH STATE ──
-// Hide both screens while we check session
-document.getElementById('login-screen').style.display = 'none';
-
-sb.auth.getSession().then(async ({ data: { session } }) => {
-  if (session && session.user) {
-    currentUser = session.user;
-    await loadUserData();
-    render();
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('logout-btn').style.display = 'block';
-  } else {
-    document.getElementById('login-screen').style.display = 'flex';
-  }
-});
-
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session && session.user) {
-    currentUser = session.user;
-    await loadUserData();
-    render();
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('logout-btn').style.display = 'block';
-  } else if (event === 'SIGNED_OUT') {
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('logout-btn').style.display = 'none';
-  }
-});
-
-// ── HELPERS ──
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -573,20 +460,21 @@ function esc(s) {
 function getOpen(id) { return data.openState[id] !== false; }
 function setOpen(id, val) { data.openState[id] = val; save(); }
 
-// ── RENDER PRINCIPIOS ──
+// ──────────────────────────────────────────────
+// RENDER
+// ──────────────────────────────────────────────
 function renderPrincipios() {
   const list = document.getElementById('principios-list');
   list.innerHTML = '';
   data.principios.forEach((p, pi) => {
     const id = 'principle-' + pi;
-    const isOpen = getOpen(id);
     const wrap = document.createElement('div');
-    wrap.className = 'collapsible var-purple' + (isOpen ? ' open' : '');
+    wrap.className = 'collapsible var-purple' + (getOpen(id) ? ' open' : '');
     wrap.id = id;
     wrap.innerHTML =
       '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
         '<span class="coll-num">' + (pi+1) + '</span>' +
-        '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="' + pi + '" oninput="onFieldInput(this)">' + esc(p.label) + '</span>' +
+        '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="' + pi + '" oninput="onEdit(this)">' + esc(p.label) + '</span>' +
         '<span class="btn-delete" onclick="event.stopPropagation();deletePrincipio(' + pi + ')">✕</span>' +
         '<span class="coll-chevron">▾</span>' +
       '</div>' +
@@ -594,7 +482,7 @@ function renderPrincipios() {
         p.children.map(function(c,ci) {
           return '<div class="child-row">' +
             '<div class="child-dot"></div>' +
-            '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onFieldInput(this)">' + esc(c) + '</div>' +
+            '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onEdit(this)">' + esc(c) + '</div>' +
             '<span class="btn-delete" onclick="deletePrincipleChild(' + pi + ',' + ci + ')">✕</span>' +
           '</div>';
         }).join('') +
@@ -604,20 +492,18 @@ function renderPrincipios() {
   });
 }
 
-// ── RENDER PERSPECTIVAS ──
 function renderPerspectivas() {
   const list = document.getElementById('perspectivas-list');
   list.innerHTML = '';
   data.perspectivas.forEach(function(p, pi) {
     const id = 'perspectiva-' + pi;
-    const isOpen = getOpen(id);
     const wrap = document.createElement('div');
-    wrap.className = 'collapsible var-green' + (isOpen ? ' open' : '');
+    wrap.className = 'collapsible var-green' + (getOpen(id) ? ' open' : '');
     wrap.id = id;
     wrap.innerHTML =
       '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
         '<div class="coll-dot"></div>' +
-        '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="' + pi + '" oninput="onFieldInput(this)">' + esc(p.label) + '</span>' +
+        '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="' + pi + '" oninput="onEdit(this)">' + esc(p.label) + '</span>' +
         '<span class="btn-delete" onclick="event.stopPropagation();deletePerspectiva(' + pi + ')">✕</span>' +
         '<span class="coll-chevron">▾</span>' +
       '</div>' +
@@ -625,7 +511,7 @@ function renderPerspectivas() {
         p.children.map(function(c,ci) {
           return '<div class="child-row">' +
             '<div class="child-dot"></div>' +
-            '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onFieldInput(this)">' + esc(c) + '</div>' +
+            '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onEdit(this)">' + esc(c) + '</div>' +
             '<span class="btn-delete" onclick="deletePerspectivaChild(' + pi + ',' + ci + ')">✕</span>' +
           '</div>';
         }).join('') +
@@ -635,7 +521,6 @@ function renderPerspectivas() {
   });
 }
 
-// ── RENDER PRÁCTICAS (Progreso) ──
 function renderPracticas() {
   const list = document.getElementById('practicas-list');
   list.innerHTML = '';
@@ -645,32 +530,30 @@ function renderPracticas() {
     div.innerHTML =
       '<div class="item-dot"></div>' +
       '<div class="item-body">' +
-        '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.text) + '</div>' +
-        '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.sub) + '</div>' +
+        '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="' + i + '" oninput="onEdit(this)">' + esc(p.text) + '</div>' +
+        '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="' + i + '" oninput="onEdit(this)">' + esc(p.sub) + '</div>' +
       '</div>' +
       '<span class="btn-delete" onclick="deletePractica(' + i + ')">✕</span>';
     list.appendChild(div);
   });
 }
 
-// ── RENDER PROYECTO ──
 function renderProyecto() {
   const tbody = document.getElementById('proyecto-body');
   tbody.innerHTML = '';
   data.proyecto.forEach(function(row, i) {
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td class="td-no"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(row.no) + '</span></td>' +
+      '<td class="td-no"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="' + i + '" oninput="onEdit(this)">' + esc(row.no) + '</span></td>' +
       '<td class="td-arr"><span class="arrow">→</span></td>' +
       '<td class="td-si"><div style="display:flex;gap:4px;align-items:center;">' +
-        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(row.si) + '</span>' +
+        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="' + i + '" oninput="onEdit(this)">' + esc(row.si) + '</span>' +
         '<span class="btn-delete" onclick="deleteProyectoRow(' + i + ')">✕</span>' +
       '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
-// ── RENDER TASKS ──
 function renderTasks() {
   const list = document.getElementById('tasks-list');
   list.innerHTML = '';
@@ -689,7 +572,6 @@ function renderTasks() {
   });
 }
 
-// ── RENDER PRIMING (Prácticas) ──
 function renderPriming() {
   const list = document.getElementById('priming-list');
   list.innerHTML = '';
@@ -699,7 +581,7 @@ function renderPriming() {
     div.innerHTML =
       '<div class="item-dot"></div>' +
       '<div class="item-body">' +
-        '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.text) + '</div>' +
+        '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="' + i + '" oninput="onEdit(this)">' + esc(p.text) + '</div>' +
       '</div>' +
       '<span class="btn-delete" onclick="deletePrimingItem(' + i + ')">✕</span>';
     list.appendChild(div);
@@ -715,19 +597,41 @@ function render() {
   renderPriming();
 }
 
-// ── COLLAPSIBLE ──
+// ──────────────────────────────────────────────
+// EDIT — write directly to data on every keystroke
+// ──────────────────────────────────────────────
+function onEdit(el) {
+  const v  = el.innerText;
+  const t  = el.dataset.type;
+  const i  = +el.dataset.i;
+  const pi = +el.dataset.pi;
+  const ci = +el.dataset.ci;
+  if (t === 'principle-label'    && data.principios[pi])    data.principios[pi].label = v;
+  if (t === 'principle-child'    && data.principios[pi])    data.principios[pi].children[ci] = v;
+  if (t === 'perspectiva-label'  && data.perspectivas[pi])  data.perspectivas[pi].label = v;
+  if (t === 'perspectiva-child'  && data.perspectivas[pi])  data.perspectivas[pi].children[ci] = v;
+  if (t === 'practica-text'      && data.practicas[i])      data.practicas[i].text = v;
+  if (t === 'practica-sub'       && data.practicas[i])      data.practicas[i].sub  = v;
+  if (t === 'proyecto-no'        && data.proyecto[i])       data.proyecto[i].no    = v;
+  if (t === 'proyecto-si'        && data.proyecto[i])       data.proyecto[i].si    = v;
+  if (t === 'priming-text'       && data.priming[i])        data.priming[i].text   = v;
+  save();
+}
+
+// ──────────────────────────────────────────────
+// COLLAPSIBLE
+// ──────────────────────────────────────────────
 function toggleColl(id) {
   const el = document.getElementById(id);
   const nowOpen = el.classList.toggle('open');
   setOpen(id, nowOpen);
 }
 
-// ── TASKS ──
+// ──────────────────────────────────────────────
+// TASKS
+// ──────────────────────────────────────────────
 function toggleTask(i) { data.tasks[i].done = !data.tasks[i].done; save(); renderTasks(); }
-function saveTaskLabel(i, el) {
-  const v = el.innerText.trim();
-  if (v && data.tasks[i]) { data.tasks[i].text = v; save(); }
-}
+function saveTaskLabel(i, el) { const v = el.innerText.trim(); if (v && data.tasks[i]) { data.tasks[i].text = v; save(); } }
 function addTask() {
   const inp = document.getElementById('task-input');
   const txt = inp.value.trim();
@@ -738,66 +642,50 @@ function addTask() {
 }
 function deleteTask(i) { data.tasks.splice(i,1); save(); renderTasks(); }
 
-// ── ADD / DELETE ──
-function addPrincipio() { data.principios.push({ label:'Nuevo principio', children:[] }); render(); applyEdit(); }
+// ──────────────────────────────────────────────
+// ADD / DELETE
+// ──────────────────────────────────────────────
+function addPrincipio() { data.principios.push({ label:'Nuevo principio', children:[] }); save(); render(); applyEdit(); }
 function deletePrincipio(pi) { data.principios.splice(pi,1); save(); render(); applyEdit(); }
-function addPrincipleChild(pi) { data.principios[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('principle-'+pi).classList.add('open'); }
-function deletePrincipleChild(pi,ci) { data.principios[pi].children.splice(ci,1); save(); render(); applyEdit(); document.getElementById('principle-'+pi).classList.add('open'); }
+function addPrincipleChild(pi) { data.principios[pi].children.push('Nuevo sub-item'); save(); render(); applyEdit(); document.getElementById('principle-'+pi).classList.add('open'); }
+function deletePrincipleChild(pi,ci) { data.principios[pi].children.splice(ci,1); save(); render(); applyEdit(); }
 
-function addPerspectiva() { data.perspectivas.push({ label:'Nueva perspectiva', children:[] }); render(); applyEdit(); }
+function addPerspectiva() { data.perspectivas.push({ label:'Nueva perspectiva', children:[] }); save(); render(); applyEdit(); }
 function deletePerspectiva(pi) { data.perspectivas.splice(pi,1); save(); render(); applyEdit(); }
-function addPerspectivaChild(pi) { data.perspectivas[pi].children.push('Nuevo sub-item'); render(); applyEdit(); document.getElementById('perspectiva-'+pi).classList.add('open'); }
-function deletePerspectivaChild(pi,ci) { data.perspectivas[pi].children.splice(ci,1); save(); render(); applyEdit(); document.getElementById('perspectiva-'+pi).classList.add('open'); }
+function addPerspectivaChild(pi) { data.perspectivas[pi].children.push('Nuevo sub-item'); save(); render(); applyEdit(); document.getElementById('perspectiva-'+pi).classList.add('open'); }
+function deletePerspectivaChild(pi,ci) { data.perspectivas[pi].children.splice(ci,1); save(); render(); applyEdit(); }
 
-function addPractica() { data.practicas.push({ text:'Nueva práctica', sub:'' }); render(); applyEdit(); }
+function addPractica() { data.practicas.push({ text:'Nueva práctica', sub:'' }); save(); render(); applyEdit(); }
 function deletePractica(i) { data.practicas.splice(i,1); save(); render(); applyEdit(); }
 
-function addProyectoRow() { data.proyecto.push({ no:'No quiero…', si:'Quiero…' }); render(); applyEdit(); }
+function addProyectoRow() { data.proyecto.push({ no:'No quiero…', si:'Quiero…' }); save(); render(); applyEdit(); }
 function deleteProyectoRow(i) { data.proyecto.splice(i,1); save(); render(); applyEdit(); }
 
-function addPrimingItem() { data.priming.push({ text:'Nuevo hábito' }); render(); applyEdit(); }
+function addPrimingItem() { data.priming.push({ text:'Nuevo hábito' }); save(); render(); applyEdit(); }
 function deletePrimingItem(i) { data.priming.splice(i,1); save(); render(); applyEdit(); }
 
-// ── EDIT MODE ──
-// No collectEdits(). Each editable element writes to data directly via oninput.
+// ──────────────────────────────────────────────
+// EDIT MODE toggle (just enables/disables contenteditable)
+// ──────────────────────────────────────────────
 let editMode = false;
 function toggleEdit() {
   editMode = !editMode;
   document.body.classList.toggle('editing', editMode);
   document.getElementById('fab').classList.toggle('active', editMode);
   document.getElementById('fab').textContent = editMode ? '✓' : '✏️';
-  applyEditState();
-  if (!editMode) { save(); showToast('Cambios guardados ✓'); }
+  applyEdit();
+  if (!editMode) showToast('Cambios guardados ✓');
 }
-function applyEditState() {
+function applyEdit() {
+  const on = editMode ? 'true' : 'false';
   document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el) {
-    el.contentEditable = editMode ? 'true' : 'false';
+    el.contentEditable = on;
   });
 }
-// Called after re-render to re-apply edit mode to new DOM nodes
-function applyEdit() {
-  if (editMode) applyEditState();
-}
-// Single handler attached to every editable node — writes directly to data
-function onFieldInput(el) {
-  const v = el.innerText; // don't trim — user might be mid-typing
-  const t = el.dataset.type;
-  const i  = +el.dataset.i;
-  const pi = +el.dataset.pi;
-  const ci = +el.dataset.ci;
-  if (t === 'principle-label'    && data.principios[pi])                                      data.principios[pi].label          = v;
-  else if (t === 'principle-child'   && data.principios[pi] && data.principios[pi].children)  data.principios[pi].children[ci]   = v;
-  else if (t === 'perspectiva-label' && data.perspectivas[pi])                                data.perspectivas[pi].label        = v;
-  else if (t === 'perspectiva-child' && data.perspectivas[pi] && data.perspectivas[pi].children) data.perspectivas[pi].children[ci] = v;
-  else if (t === 'practica-text'  && data.practicas[i])  data.practicas[i].text  = v;
-  else if (t === 'practica-sub'   && data.practicas[i])  data.practicas[i].sub   = v;
-  else if (t === 'proyecto-no'    && data.proyecto[i])   data.proyecto[i].no     = v;
-  else if (t === 'proyecto-si'    && data.proyecto[i])   data.proyecto[i].si     = v;
-  else if (t === 'priming-text'   && data.priming[i])    data.priming[i].text    = v;
-  save();
-}
 
-// ── TOAST ──
+// ──────────────────────────────────────────────
+// TOAST
+// ──────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -806,7 +694,9 @@ function showToast(msg) {
   toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
 
-// ── RESCUE MODAL ──
+// ──────────────────────────────────────────────
+// RESCUE MODAL
+// ──────────────────────────────────────────────
 const OBSTACLES = [
   { emoji:'😶', label:'Procrastinando' },
   { emoji:'🌀', label:'Desenfocado' },
@@ -831,59 +721,17 @@ function openRescue() {
   document.getElementById('rescueOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+function closeRescue() { document.getElementById('rescueOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+function maybeCloseRescue(e) { if (e.target === document.getElementById('rescueOverlay')) closeRescue(); }
+function rescueBack() { document.getElementById('rescue-step-1').classList.remove('hidden'); document.getElementById('rescue-step-2').classList.add('hidden'); }
 
-function closeRescue() {
-  document.getElementById('rescueOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function maybeCloseRescue(e) {
-  if (e.target === document.getElementById('rescueOverlay')) closeRescue();
-}
-
-function rescueBack() {
-  document.getElementById('rescue-step-1').classList.remove('hidden');
-  document.getElementById('rescue-step-2').classList.add('hidden');
-}
-
-// ── RESCUE: dynamic responses from data ──
 const OBSTACLE_CONFIG = {
-  'Procrastinando': {
-    color:'var(--blue)',
-    pregunta:'¿Cómo haría esto si no pudiera avergonzarme ni ser duro conmigo?',
-    principios:[0,1], perspectivas:[0], practicas:[0],
-    hint:'El objetivo ahora no es terminar. Es empezar.'
-  },
-  'Desenfocado': {
-    color:'var(--purple)',
-    pregunta:'¿Qué distracción puedo eliminar ahora mismo para hacer la concentración más fácil?',
-    principios:[1], perspectivas:[0], practicas:[1],
-    hint:'El foco no es fuerza de voluntad — es reducir opciones.'
-  },
-  'Incertidumbre': {
-    color:'var(--green)',
-    pregunta:'¿Qué es lo que ya sabés? ¿Qué es lo mínimo que necesitás saber para dar el siguiente paso?',
-    principios:[0,2], perspectivas:[0], practicas:[2],
-    hint:'La claridad viene de hacer, no de pensar.'
-  },
-  'Evitación emocional': {
-    color:'#b45309',
-    pregunta:'¿Qué emoción estás evitando? ¿Qué pasaría si la dejaras estar sin actuar sobre ella?',
-    principios:[2], perspectivas:[0,1], practicas:[0],
-    hint:'Nombrar la emoción le quita potencia.'
-  },
-  'Parálisis por análisis': {
-    color:'var(--slate)',
-    pregunta:'¿Qué información adicional cambiaría realmente tu decisión? Si no sabés, ya tenés suficiente.',
-    principios:[0,2], perspectivas:[1], practicas:[2],
-    hint:'Decidir mal y corregir es mejor que no decidir.'
-  },
-  'Desmotivado': {
-    color:'var(--green)',
-    pregunta:'¿Estás haciendo esto porque querés o porque sentís que deberías?',
-    principios:[1,2], perspectivas:[1], practicas:[0],
-    hint:'La curiosidad es la puerta de entrada a la motivación.'
-  }
+  'Procrastinando':        { color:'var(--blue)',   pregunta:'¿Cómo haría esto si no pudiera avergonzarme ni ser duro conmigo?',                              hint:'El objetivo ahora no es terminar. Es empezar.',          principios:[0,1], perspectivas:[0], practicas:[0] },
+  'Desenfocado':           { color:'var(--purple)', pregunta:'¿Qué distracción puedo eliminar ahora mismo para hacer la concentración más fácil?',            hint:'El foco no es fuerza de voluntad — es reducir opciones.', principios:[1],   perspectivas:[0], practicas:[1] },
+  'Incertidumbre':         { color:'var(--green)',  pregunta:'¿Qué es lo que ya sabés? ¿Qué es lo mínimo que necesitás saber para dar el siguiente paso?',    hint:'La claridad viene de hacer, no de pensar.',              principios:[0,2], perspectivas:[0], practicas:[2] },
+  'Evitación emocional':   { color:'#b45309',       pregunta:'¿Qué emoción estás evitando? ¿Qué pasaría si la dejaras estar sin actuar sobre ella?',          hint:'Nombrar la emoción le quita potencia.',                  principios:[2],   perspectivas:[0,1], practicas:[0] },
+  'Parálisis por análisis':{ color:'var(--slate)',  pregunta:'¿Qué información adicional cambiaría realmente tu decisión? Si no sabés, ya tenés suficiente.', hint:'Decidir mal y corregir es mejor que no decidir.',        principios:[0,2], perspectivas:[1], practicas:[2] },
+  'Desmotivado':           { color:'var(--green)',  pregunta:'¿Estás haciendo esto porque querés o porque sentís que deberías?',                               hint:'La curiosidad es la puerta de entrada a la motivación.', principios:[1,2], perspectivas:[1], practicas:[0] }
 };
 
 function buildRescueCards(config) {
@@ -920,15 +768,32 @@ function showRescueResponse(label) {
       '<div class="rescue-card-label" style="color:' + config.color + '">Pregunta clave</div>' +
       '<div class="rescue-card-text">' + config.pregunta + '</div>' +
       (config.hint ? '<div class="rescue-card-hint">↳ ' + config.hint + '</div>' : '') +
-    '</div>' +
-    buildRescueCards(config);
+    '</div>' + buildRescueCards(config);
 }
 
-// ── INIT ──
-const _d = new Date();
-const days   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-const daysFull = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-document.getElementById('dateMeta').textContent = days[_d.getDay()] + ' · ' + _d.getDate() + ' ' + months[_d.getMonth()] + ' · ' + _d.getFullYear();
-document.getElementById('day-name').textContent = daysFull[_d.getDay()];
-</script></html>
+// ──────────────────────────────────────────────
+// BOOT
+// ──────────────────────────────────────────────
+function bootApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('logout-btn').style.display = 'block';
+  data = loadData();
+  render();
+  const _d = new Date();
+  const days     = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const daysFull = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months   = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  document.getElementById('dateMeta').textContent = days[_d.getDay()] + ' · ' + _d.getDate() + ' ' + months[_d.getMonth()] + ' · ' + _d.getFullYear();
+  document.getElementById('day-name').textContent = daysFull[_d.getDay()];
+}
+
+// Check existing session on load
+const existingSession = getSession();
+if (existingSession) {
+  currentUser = existingSession;
+  bootApp();
+} else {
+  document.getElementById('login-screen').style.display = 'flex';
+}
+</script>
+</body>
