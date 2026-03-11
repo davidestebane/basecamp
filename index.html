@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Base Camp — David Elorza</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -112,7 +112,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .task-check{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--amber-border);background:white;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s;}
 .task-item.done .task-check{background:#d97706;border-color:#d97706;}
 .task-item.done .task-check::after{content:'✓';font-size:9px;color:white;font-weight:700;}
-.task-label{font-size:13px;color:var(--text-1);line-height:1.4;flex:1;font-weight:500;outline:none;border-radius:4px;transition:background .12s;cursor:text;}
+.task-label{font-size:16px;color:var(--text-1);line-height:1.4;flex:1;font-weight:500;outline:none;border-radius:4px;transition:background .12s;cursor:text;}
 .task-label:hover{background:rgba(0,0,0,.03);}
 .task-label:focus{background:white;box-shadow:0 0 0 2px var(--amber-border);padding:0 3px;}
 .task-item.done .task-label{color:var(--text-3);text-decoration:line-through;font-weight:400;}
@@ -121,7 +121,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .task-add-row{display:flex;align-items:center;gap:8px;padding:4px 8px;margin-top:4px;border-radius:7px;transition:background .12s;}
 .task-add-row:focus-within{background:#fff8e6;}
 .task-add-icon{font-size:13px;color:var(--amber-border);flex-shrink:0;line-height:1;}
-.task-add-input{flex:1;font-size:13px;font-family:'DM Sans',sans-serif;border:none;outline:none;background:transparent;color:var(--text-1);padding:2px 0;}
+.task-add-input{flex:1;font-size:16px;font-family:'DM Sans',sans-serif;border:none;outline:none;background:transparent;color:var(--text-1);padding:2px 0;}
 .task-add-input::placeholder{color:var(--text-3);font-weight:300;}
 
 /* ── Edit mode ── */
@@ -189,7 +189,7 @@ body.editing .btn-delete{display:block;}
 .lby{font-size:13px;font-style:italic;color:var(--text-3);text-align:center;font-family:'Fraunces',serif;font-weight:300;margin-top:-10px;}
 .lf{display:flex;flex-direction:column;gap:11px;}
 .lfl{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;display:block;margin-bottom:4px;}
-.lfi{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-1);outline:none;}
+.lfi{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg);font-size:16px;font-family:'DM Sans',sans-serif;color:var(--text-1);outline:none;}
 .lfi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:#fff;}
 .lbtn{width:100%;padding:12px;border-radius:10px;border:none;background:var(--text-1);color:#fff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
 .lbtn:hover{background:#2d2c29;}
