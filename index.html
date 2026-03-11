@@ -586,7 +586,7 @@ function renderPrincipios() {
     wrap.innerHTML =
       '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
         '<span class="coll-num">' + (pi+1) + '</span>' +
-        '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="' + pi + '">' + esc(p.label) + '</span>' +
+        '<span class="coll-label" contenteditable="false" data-type="principle-label" data-pi="' + pi + '" oninput="onFieldInput(this)">' + esc(p.label) + '</span>' +
         '<span class="btn-delete" onclick="event.stopPropagation();deletePrincipio(' + pi + ')">✕</span>' +
         '<span class="coll-chevron">▾</span>' +
       '</div>' +
@@ -594,7 +594,7 @@ function renderPrincipios() {
         p.children.map(function(c,ci) {
           return '<div class="child-row">' +
             '<div class="child-dot"></div>' +
-            '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="' + pi + '" data-ci="' + ci + '">' + esc(c) + '</div>' +
+            '<div class="child-text" contenteditable="false" data-type="principle-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onFieldInput(this)">' + esc(c) + '</div>' +
             '<span class="btn-delete" onclick="deletePrincipleChild(' + pi + ',' + ci + ')">✕</span>' +
           '</div>';
         }).join('') +
@@ -617,7 +617,7 @@ function renderPerspectivas() {
     wrap.innerHTML =
       '<div class="coll-trigger" onclick="toggleColl(\'' + id + '\')">' +
         '<div class="coll-dot"></div>' +
-        '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="' + pi + '">' + esc(p.label) + '</span>' +
+        '<span class="coll-label" contenteditable="false" data-type="perspectiva-label" data-pi="' + pi + '" oninput="onFieldInput(this)">' + esc(p.label) + '</span>' +
         '<span class="btn-delete" onclick="event.stopPropagation();deletePerspectiva(' + pi + ')">✕</span>' +
         '<span class="coll-chevron">▾</span>' +
       '</div>' +
@@ -625,7 +625,7 @@ function renderPerspectivas() {
         p.children.map(function(c,ci) {
           return '<div class="child-row">' +
             '<div class="child-dot"></div>' +
-            '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="' + pi + '" data-ci="' + ci + '">' + esc(c) + '</div>' +
+            '<div class="child-text" contenteditable="false" data-type="perspectiva-child" data-pi="' + pi + '" data-ci="' + ci + '" oninput="onFieldInput(this)">' + esc(c) + '</div>' +
             '<span class="btn-delete" onclick="deletePerspectivaChild(' + pi + ',' + ci + ')">✕</span>' +
           '</div>';
         }).join('') +
@@ -645,8 +645,8 @@ function renderPracticas() {
     div.innerHTML =
       '<div class="item-dot"></div>' +
       '<div class="item-body">' +
-        '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="' + i + '">' + esc(p.text) + '</div>' +
-        '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="' + i + '">' + esc(p.sub) + '</div>' +
+        '<div class="item-text" contenteditable="false" data-type="practica-text" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.text) + '</div>' +
+        '<div class="item-sub" contenteditable="false" data-type="practica-sub" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.sub) + '</div>' +
       '</div>' +
       '<span class="btn-delete" onclick="deletePractica(' + i + ')">✕</span>';
     list.appendChild(div);
@@ -660,10 +660,10 @@ function renderProyecto() {
   data.proyecto.forEach(function(row, i) {
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td class="td-no"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="' + i + '">' + esc(row.no) + '</span></td>' +
+      '<td class="td-no"><span class="proyecto-cell-no" contenteditable="false" data-type="proyecto-no" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(row.no) + '</span></td>' +
       '<td class="td-arr"><span class="arrow">→</span></td>' +
       '<td class="td-si"><div style="display:flex;gap:4px;align-items:center;">' +
-        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="' + i + '">' + esc(row.si) + '</span>' +
+        '<span class="proyecto-cell-si" contenteditable="false" data-type="proyecto-si" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(row.si) + '</span>' +
         '<span class="btn-delete" onclick="deleteProyectoRow(' + i + ')">✕</span>' +
       '</div></td>';
     tbody.appendChild(tr);
@@ -699,7 +699,7 @@ function renderPriming() {
     div.innerHTML =
       '<div class="item-dot"></div>' +
       '<div class="item-body">' +
-        '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="' + i + '">' + esc(p.text) + '</div>' +
+        '<div class="item-text" contenteditable="false" data-type="priming-text" data-i="' + i + '" oninput="onFieldInput(this)">' + esc(p.text) + '</div>' +
       '</div>' +
       '<span class="btn-delete" onclick="deletePrimingItem(' + i + ')">✕</span>';
     list.appendChild(div);
@@ -759,42 +759,42 @@ function addPrimingItem() { data.priming.push({ text:'Nuevo hábito' }); render(
 function deletePrimingItem(i) { data.priming.splice(i,1); save(); render(); applyEdit(); }
 
 // ── EDIT MODE ──
+// No collectEdits(). Each editable element writes to data directly via oninput.
 let editMode = false;
 function toggleEdit() {
   editMode = !editMode;
   document.body.classList.toggle('editing', editMode);
   document.getElementById('fab').classList.toggle('active', editMode);
   document.getElementById('fab').textContent = editMode ? '✓' : '✏️';
+  applyEditState();
+  if (!editMode) { save(); showToast('Cambios guardados ✓'); }
+}
+function applyEditState() {
   document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el) {
     el.contentEditable = editMode ? 'true' : 'false';
   });
-  if (!editMode) { collectEdits(); save(); showToast('Cambios guardados ✓'); }
 }
+// Called after re-render to re-apply edit mode to new DOM nodes
 function applyEdit() {
-  if (!editMode) return;
-  document.querySelectorAll('[data-type]:not([data-type="task-label"])').forEach(function(el) {
-    el.contentEditable = 'true';
-  });
+  if (editMode) applyEditState();
 }
-function collectEdits() {
-  // Safe: guard every write against the array still existing at that index
-  document.querySelectorAll('[data-type]').forEach(function(el) {
-    const v = el.innerText.trim();
-    const t = el.dataset.type;
-    const i  = +el.dataset.i;
-    const pi = +el.dataset.pi;
-    const ci = +el.dataset.ci;
-    if (!v) return; // never write empty strings
-    if (t === 'principle-label'    && data.principios[pi])                        data.principios[pi].label = v;
-    else if (t === 'principle-child'    && data.principios[pi] && data.principios[pi].children[ci] !== undefined) data.principios[pi].children[ci] = v;
-    else if (t === 'perspectiva-label'  && data.perspectivas[pi])                 data.perspectivas[pi].label = v;
-    else if (t === 'perspectiva-child'  && data.perspectivas[pi] && data.perspectivas[pi].children[ci] !== undefined) data.perspectivas[pi].children[ci] = v;
-    else if (t === 'practica-text'      && data.practicas[i])                     data.practicas[i].text = v;
-    else if (t === 'practica-sub'       && data.practicas[i])                     data.practicas[i].sub  = v;
-    else if (t === 'proyecto-no'        && data.proyecto[i])                      data.proyecto[i].no    = v;
-    else if (t === 'proyecto-si'        && data.proyecto[i])                      data.proyecto[i].si    = v;
-    else if (t === 'priming-text'       && data.priming[i])                       data.priming[i].text   = v;
-  });
+// Single handler attached to every editable node — writes directly to data
+function onFieldInput(el) {
+  const v = el.innerText; // don't trim — user might be mid-typing
+  const t = el.dataset.type;
+  const i  = +el.dataset.i;
+  const pi = +el.dataset.pi;
+  const ci = +el.dataset.ci;
+  if (t === 'principle-label'    && data.principios[pi])                                      data.principios[pi].label          = v;
+  else if (t === 'principle-child'   && data.principios[pi] && data.principios[pi].children)  data.principios[pi].children[ci]   = v;
+  else if (t === 'perspectiva-label' && data.perspectivas[pi])                                data.perspectivas[pi].label        = v;
+  else if (t === 'perspectiva-child' && data.perspectivas[pi] && data.perspectivas[pi].children) data.perspectivas[pi].children[ci] = v;
+  else if (t === 'practica-text'  && data.practicas[i])  data.practicas[i].text  = v;
+  else if (t === 'practica-sub'   && data.practicas[i])  data.practicas[i].sub   = v;
+  else if (t === 'proyecto-no'    && data.proyecto[i])   data.proyecto[i].no     = v;
+  else if (t === 'proyecto-si'    && data.proyecto[i])   data.proyecto[i].si     = v;
+  else if (t === 'priming-text'   && data.priming[i])    data.priming[i].text    = v;
+  save();
 }
 
 // ── TOAST ──
