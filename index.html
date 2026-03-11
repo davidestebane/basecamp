@@ -87,7 +87,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .item-body{flex:1;}
 .item-text{font-size:13px;font-weight:600;color:var(--text-1);line-height:1.4;}
 .item-text.muted{font-weight:400;color:var(--text-2);}
-.item-sub{font-size:11px;color:var(--text-3);margin-top:2px;line-height:1.4;font-style:italic;}
+.item-sub{font-size:11px;color:var(--text-1);margin-top:2px;line-height:1.4;font-style:italic;}
 
 /* ── Proyecto table ── */
 .proyecto-table{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;}
@@ -362,9 +362,9 @@ async function doSignIn() {
   const err   =  document.getElementById('si-err');
   err.style.display = 'none';
   if (!email || !pass) { err.textContent = 'Completá los dos campos.'; err.style.display = 'block'; return; }
-  const accounts = JSON.parse(localStorage.getItem('bc_accounts') || '{}');
-  if (!accounts[email]) { err.textContent = 'No existe cuenta con ese email.'; err.style.display = 'block'; return; }
-  if (accounts[email] !== pass) { err.textContent = 'Contraseña incorrecta.'; err.style.display = 'block'; return; }
+  const { data: row } = await sb.from('accounts').select('password_hash').eq('email', email).single();
+  if (!row) { err.textContent = 'No existe cuenta con ese email.'; err.style.display = 'block'; return; }
+  if (row.password_hash !== pass) { err.textContent = 'Contraseña incorrecta.'; err.style.display = 'block'; return; }
   currentUser = createSession(email);
   await bootApp();
 }
@@ -376,10 +376,10 @@ async function doSignUp() {
   err.style.display = 'none';
   if (!email || !pass) { err.textContent = 'Completá los dos campos.'; err.style.display = 'block'; return; }
   if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres.'; err.style.display = 'block'; return; }
-  const accounts = JSON.parse(localStorage.getItem('bc_accounts') || '{}');
-  if (accounts[email]) { err.textContent = 'Ya existe una cuenta con ese email.'; err.style.display = 'block'; return; }
-  accounts[email] = pass;
-  localStorage.setItem('bc_accounts', JSON.stringify(accounts));
+  const { data: existing } = await sb.from('accounts').select('email').eq('email', email).single();
+  if (existing) { err.textContent = 'Ya existe una cuenta con ese email.'; err.style.display = 'block'; return; }
+  const { error } = await sb.from('accounts').insert({ email, password_hash: pass });
+  if (error) { err.textContent = 'Error al crear la cuenta. Intentá de nuevo.'; err.style.display = 'block'; return; }
   currentUser = createSession(email);
   await bootApp();
 }
@@ -407,7 +407,7 @@ async function cloudLoad(email) {
   try {
     const { data: row } = await sb
       .from('user_data')
-      .select('data, last_day')
+      .select('data, last_day, updated_at')
       .eq('email', email)
       .single();
     if (!row || !row.data) return null;
@@ -421,10 +421,30 @@ async function cloudLoad(email) {
       priming:      Array.isArray(d.priming)       ? d.priming      : DEFAULT.priming,
       tasks:        row.last_day === today && Array.isArray(d.tasks) ? d.tasks : [],
       openState:    (d.openState && typeof d.openState === 'object') ? d.openState : {},
-      lastDay:      today
+      lastDay:      today,
     };
   } catch(e) { return null; }
 }
+
+// Called on focus/visibility — cloud is source of truth
+async function syncFromCloud() {
+  if (!currentUser) return;
+  if (document.activeElement && document.activeElement.isContentEditable) return;
+  if (document.activeElement && document.activeElement.id === 'task-input') return;
+  const cloudData = await cloudLoad(currentUser.email);
+  if (!cloudData) return;
+  data = cloudData;
+  localStorage.setItem(DATA_PREFIX + currentUser.email, JSON.stringify(data));
+  render();
+}
+
+// Sync on tab focus / visibility restore
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') syncFromCloud();
+});
+window.addEventListener('focus', syncFromCloud);
+
+
 
 let cloudSaveTimer = null;
 function cloudSave(email) {
