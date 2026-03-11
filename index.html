@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Base Camp</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>&#x1F3D5;</text></svg>">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -259,7 +259,9 @@ body.editing .btn-delete{display:block;}
 
 var SUPA_URL = 'https://kridwawynaampaikrlal.supabase.co';
 var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWR3YXd5bmFhbXBhaWtybGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODIyMzEsImV4cCI6MjA4ODc1ODIzMX0.UKY7XANWAOQPsyjInjqnXX9HOYmRyQ7XeK-MCu3To50';
-var sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+var sb = supabase.createClient(SUPA_URL, SUPA_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true }
+});
 
 var DEFAULT = {
   principios: [
