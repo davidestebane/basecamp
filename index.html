@@ -250,7 +250,6 @@ body.editing .btn-delete{display:block;}
   <div class="page-header">
     <div class="page-title">Base <em>Camp</em> <span style="font-size:14px;font-style:italic;color:var(--text-3);font-weight:300;">by David Elorza</span></div>
     <div class="header-right">
-      <span class="sync-indicator" id="sync-indicator"></span>
       <button class="rescue-btn" onclick="openRescue()" title="¿Qué te tiene atascado?">⚡</button>
       <div class="page-meta" id="dateMeta">—</div>
       <button class="logout-btn" onclick="logout()">Salir</button>
@@ -418,52 +417,33 @@ function translateError(msg) {
 
 // ── CLOUD SYNC ──
 async function loadFromSupabase() {
-  setSyncIndicator('↻');
   const { data: rows, error } = await sb
     .from('user_data')
     .select('data, last_day')
     .eq('user_id', currentUser.id)
     .single();
 
-  if (error && error.code !== 'PGRST116') {
-    setSyncIndicator('⚠');
-    return;
-  }
+  if (error && error.code !== 'PGRST116') return;
 
   if (rows) {
-    const today = new Date().toDateString();
     data = rows.data;
     if (!data.openState) data.openState = {};
-    // reset daily tasks if new day
-    if (rows.last_day !== today) {
-      data.tasks = [];
-    }
+    if (rows.last_day !== new Date().toDateString()) data.tasks = [];
   }
-  setSyncIndicator('');
 }
 
 async function saveToSupabase() {
   if (!currentUser) return;
-  setSyncIndicator('↻');
-  const today = new Date().toDateString();
-  const { error } = await sb
-    .from('user_data')
-    .upsert({
-      user_id: currentUser.id,
-      data: data,
-      last_day: today
-    }, { onConflict: 'user_id' });
-  setSyncIndicator(error ? '⚠' : '');
+  await sb.from('user_data').upsert({
+    user_id: currentUser.id,
+    data: data,
+    last_day: new Date().toDateString()
+  }, { onConflict: 'user_id' });
 }
 
 function save() {
-  // debounce — espera 800ms de inactividad antes de guardar
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(saveToSupabase, 800);
-}
-
-function setSyncIndicator(s) {
-  document.getElementById('sync-indicator').textContent = s;
 }
 
 // ── HELPERS ──
@@ -736,23 +716,45 @@ const months   = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','n
 document.getElementById('dateMeta').textContent = days[_d.getDay()] + ' · ' + _d.getDate() + ' ' + months[_d.getMonth()] + ' · ' + _d.getFullYear();
 document.getElementById('day-name').textContent = daysFull[_d.getDay()];
 
-// Escuchar cambios de sesión
-sb.auth.onAuthStateChange(async function(event, session) {
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  document.getElementById('fab').style.display = 'flex';
+}
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('fab').style.display = 'none';
+}
+
+// Arranca oculto todo
+document.getElementById('login-screen').style.display = 'none';
+document.getElementById('app-screen').style.display = 'none';
+document.getElementById('fab').style.display = 'none';
+
+// 1. Verificar sesión existente al cargar (para no pedir login cada vez)
+sb.auth.getSession().then(async function({ data: { session } }) {
   if (session && session.user) {
     currentUser = session.user;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display = 'block';
-    document.getElementById('fab').style.display = 'flex';
     await loadFromSupabase();
     render();
+    showApp();
   } else {
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('app-screen').style.display = 'none';
-    document.getElementById('fab').style.display = 'none';
+    showLogin();
   }
 });
 
-document.getElementById('fab').style.display = 'none';
+// 2. Escuchar cambios de sesión (login/logout)
+sb.auth.onAuthStateChange(async function(event, session) {
+  if (event === 'SIGNED_IN' && session && session.user) {
+    currentUser = session.user;
+    await loadFromSupabase();
+    render();
+    showApp();
+  } else if (event === 'SIGNED_OUT') {
+    showLogin();
+  }
+});
 </script>
 </body>
 </html>
