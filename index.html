@@ -197,6 +197,7 @@ body.editing .btn-delete{display:block;}
 .ltog{font-size:12px;color:var(--text-3);text-align:center;}
 .ltog a{color:var(--green);text-decoration:underline;cursor:pointer;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -355,7 +356,7 @@ function showForm(which) {
   document.getElementById('form-up').style.display = which === 'up' ? 'flex' : 'none';
 }
 
-function doSignIn() {
+async function doSignIn() {
   const email = (document.getElementById('si-e').value || '').trim().toLowerCase();
   const pass  =  document.getElementById('si-p').value || '';
   const err   =  document.getElementById('si-err');
@@ -365,10 +366,10 @@ function doSignIn() {
   if (!accounts[email]) { err.textContent = 'No existe cuenta con ese email.'; err.style.display = 'block'; return; }
   if (accounts[email] !== pass) { err.textContent = 'Contraseña incorrecta.'; err.style.display = 'block'; return; }
   currentUser = createSession(email);
-  bootApp();
+  await bootApp();
 }
 
-function doSignUp() {
+async function doSignUp() {
   const email = (document.getElementById('su-e').value || '').trim().toLowerCase();
   const pass  =  document.getElementById('su-p').value || '';
   const err   =  document.getElementById('su-err');
@@ -380,7 +381,7 @@ function doSignUp() {
   accounts[email] = pass;
   localStorage.setItem('bc_accounts', JSON.stringify(accounts));
   currentUser = createSession(email);
-  bootApp();
+  await bootApp();
 }
 
 function doLogout() {
@@ -393,6 +394,49 @@ function doLogout() {
   document.getElementById('si-p').value = '';
   document.getElementById('si-err').style.display = 'none';
   showForm('in');
+}
+
+// ──────────────────────────────────────────────
+// SUPABASE (cloud sync — auth-free, email as key)
+// ──────────────────────────────────────────────
+const SUPA_URL = 'https://kridwawynaampaikrlal.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWR3YXd5bmFhbXBhaWtybGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODIyMzEsImV4cCI6MjA4ODc1ODIzMX0.UKY7XANWAOQPsyjInjqnXX9HOYmRyQ7XeK-MCu3To50';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+async function cloudLoad(email) {
+  try {
+    const { data: row } = await sb
+      .from('user_data')
+      .select('data, last_day')
+      .eq('email', email)
+      .single();
+    if (!row || !row.data) return null;
+    const d = row.data;
+    const today = new Date().toDateString();
+    return {
+      principios:   Array.isArray(d.principios)   ? d.principios   : DEFAULT.principios,
+      perspectivas: Array.isArray(d.perspectivas)  ? d.perspectivas : DEFAULT.perspectivas,
+      practicas:    Array.isArray(d.practicas)     ? d.practicas    : DEFAULT.practicas,
+      proyecto:     Array.isArray(d.proyecto)      ? d.proyecto     : DEFAULT.proyecto,
+      priming:      Array.isArray(d.priming)       ? d.priming      : DEFAULT.priming,
+      tasks:        row.last_day === today && Array.isArray(d.tasks) ? d.tasks : [],
+      openState:    (d.openState && typeof d.openState === 'object') ? d.openState : {},
+      lastDay:      today
+    };
+  } catch(e) { return null; }
+}
+
+let cloudSaveTimer = null;
+function cloudSave(email) {
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(async function() {
+    try {
+      await sb.from('user_data').upsert(
+        { email: email, data: data, last_day: data.lastDay },
+        { onConflict: 'email' }
+      );
+    } catch(e) {}
+  }, 800);
 }
 
 // ──────────────────────────────────────────────
@@ -449,6 +493,7 @@ function save() {
   if (!currentUser) return;
   data.lastDay = new Date().toDateString();
   localStorage.setItem(DATA_PREFIX + currentUser.email, JSON.stringify(data));
+  cloudSave(currentUser.email);
 }
 
 let data = JSON.parse(JSON.stringify(DEFAULT));
@@ -774,10 +819,18 @@ function showRescueResponse(label) {
 // ──────────────────────────────────────────────
 // BOOT
 // ──────────────────────────────────────────────
-function bootApp() {
+async function bootApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
-  data = loadData();
+  // Try cloud first, fall back to localStorage
+  const cloudData = await cloudLoad(currentUser.email);
+  if (cloudData) {
+    data = cloudData;
+    // Also update localStorage with cloud data
+    localStorage.setItem(DATA_PREFIX + currentUser.email, JSON.stringify(data));
+  } else {
+    data = loadData();
+  }
   render();
   const _d = new Date();
   const days     = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
@@ -788,12 +841,14 @@ function bootApp() {
 }
 
 // Check existing session on load
-const existingSession = getSession();
-if (existingSession) {
-  currentUser = existingSession;
-  bootApp();
-} else {
-  document.getElementById('login-screen').style.display = 'flex';
-}
+(async function() {
+  const existingSession = getSession();
+  if (existingSession) {
+    currentUser = existingSession;
+    await bootApp();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+})();
 </script>
 </body>
